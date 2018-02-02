@@ -41,6 +41,15 @@ public enum JSON: Codable {
         }
     }
     
+    mutating func set(_ key: String, _ json: JSON)throws {
+        switch self {
+        case var .object(structure):
+            structure[key] = json
+            self = .object(structure)
+        default: throw JSONError.unableToMergeCases(self, json)
+        }
+    }
+    
     // MARK: - Sub-Types
     
     public struct CodingKeys: CodingKey {
