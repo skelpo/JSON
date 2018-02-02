@@ -4,4 +4,5 @@ public enum JSON {
     case number(Number)
     case bool(Bool)
     indirect case array([JSON])
+    indirect case object([String: JSON])
 }
