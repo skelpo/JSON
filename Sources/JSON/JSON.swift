@@ -1,4 +1,6 @@
 public enum JSON: Codable {
+    
+    // MARK: - Cases
     case null
     case string(String)
     case number(Number)
@@ -6,6 +8,7 @@ public enum JSON: Codable {
     indirect case array([JSON])
     indirect case object([String: JSON])
     
+    // MARK: - Public Methods
     public init(from decoder: Decoder) throws {
         if let container = try? decoder.container(keyedBy: JSON.CodingKeys.self) {
             self = try JSON(from: container)
@@ -15,6 +18,46 @@ public enum JSON: Codable {
             throw DecodingError.dataCorrupted(DecodingError.Context.init(codingPath: [], debugDescription: "No top-level object or array found"))
         }
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        switch self {
+        case let .object(structure):
+            let container = encoder.container(keyedBy: JSON.CodingKeys.self)
+            try self.encode(object: structure, with: container)
+        case let .array(sequence):
+            let container = encoder.unkeyedContainer()
+            try self.encode(array: sequence, with: container)
+        default:
+            throw EncodingError.invalidValue(self, EncodingError.Context.init(codingPath: [], debugDescription: "Top-level value must be array or object"))
+        }
+    }
+    
+    mutating func append(_ json: JSON)throws {
+        switch self {
+        case var .array(sequence):
+            sequence.append(json)
+            self = .array(sequence)
+        default: throw JSONError.unableToMergeCases(self, json)
+        }
+    }
+    
+    // MARK: - Sub-Types
+    
+    public struct CodingKeys: CodingKey {
+        public var stringValue: String
+        public var intValue: Int?
+        
+        public init(stringValue: String) {
+            self.stringValue = stringValue
+        }
+        
+        public init(intValue: Int) {
+            self.init(stringValue: "\(intValue)")
+            self.intValue = intValue
+        }
+    }
+    
+    // MARK: - Private Helper Coding Methods
     
     private init(from container: KeyedDecodingContainer<JSON.CodingKeys>)throws {
         var object: [String: JSON] = [:]
@@ -65,19 +108,6 @@ public enum JSON: Codable {
         self = .array(array)
     }
     
-    public func encode(to encoder: Encoder) throws {
-        switch self {
-        case let .object(structure):
-            let container = encoder.container(keyedBy: JSON.CodingKeys.self)
-            try self.encode(object: structure, with: container)
-        case let .array(sequence):
-            let container = encoder.unkeyedContainer()
-            try self.encode(array: sequence, with: container)
-        default:
-            throw EncodingError.invalidValue(self, EncodingError.Context.init(codingPath: [], debugDescription: "Top-level value must be array or object"))
-        }
-    }
-    
     private func encode(object: [String: JSON], with c: KeyedEncodingContainer<JSON.CodingKeys>) throws {
         var container = c
         
@@ -115,20 +145,6 @@ public enum JSON: Codable {
                 let con = container.nestedUnkeyedContainer()
                 try encode(array: value, with: con)
             }
-        }
-    }
-    
-    public struct CodingKeys: CodingKey {
-        public var stringValue: String
-        public var intValue: Int?
-        
-        public init(stringValue: String) {
-            self.stringValue = stringValue
-        }
-        
-        public init(intValue: Int) {
-            self.init(stringValue: "\(intValue)")
-            self.intValue = intValue
         }
     }
 }
