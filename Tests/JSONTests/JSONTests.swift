@@ -23,6 +23,34 @@ class JSONTests: XCTestCase {
         XCTAssert(string != nil)
     }
     
+    func testDecodingSpeed() {
+        let data = json.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        
+        measure {
+            do {
+                _ = try decoder.decode(JSON.self, from: data)
+            } catch let error {
+                XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testEncodingSpeed()throws {
+        let data = json.data(using: .utf8)!
+        let j = try JSONDecoder().decode(JSON.self, from: data)
+        let encoder = JSONEncoder()
+        
+        
+        measure {
+            do {
+                _ = try encoder.encode(j)
+            } catch let error {
+                XCTFail("\(error)")
+            }
+        }
+    }
+    
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
         ("testJSONDecoding", testJSONDecoding)
     ]
