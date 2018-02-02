@@ -50,6 +50,14 @@ public enum JSON: Codable {
         }
     }
     
+    func merge(_ json: JSON)throws -> JSON {
+        guard case let JSON.object(new) = json, case var JSON.object(this) = self else {
+            throw JSONError.unableToMergeCases(self, json)
+        }
+        this.merge(new) { (_, new) -> JSON in new }
+        return .object(this)
+    }
+    
     // MARK: - Sub-Types
     
     public struct CodingKeys: CodingKey {
