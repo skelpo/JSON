@@ -32,7 +32,7 @@ public enum JSON: Codable {
         }
     }
     
-    mutating func append(_ json: JSON)throws {
+    public mutating func append(_ json: JSON)throws {
         switch self {
         case var .array(sequence):
             sequence.append(json)
@@ -41,7 +41,7 @@ public enum JSON: Codable {
         }
     }
     
-    mutating func set(_ key: String, _ json: JSON)throws {
+    public mutating func set(_ key: String, _ json: JSON)throws {
         switch self {
         case var .object(structure):
             structure[key] = json
@@ -50,7 +50,7 @@ public enum JSON: Codable {
         }
     }
     
-    func merge(_ json: JSON)throws -> JSON {
+    public func merge(_ json: JSON)throws -> JSON {
         guard case let JSON.object(new) = json, case var JSON.object(this) = self else {
             throw JSONError.unableToMergeCases(self, json)
         }
