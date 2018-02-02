@@ -66,7 +66,48 @@ public enum JSON: Codable {
     }
     
     public func encode(to encoder: Encoder) throws {
+        switch self {
+        case let .object(structure):
+            let container = encoder.container(keyedBy: JSON.CodingKeys.self)
+            try self.encode(object: structure, with: container)
+        case let .array(sequence):
+            let container = encoder.unkeyedContainer()
+            try self.encode(array: sequence, with: container)
+        default:
+            throw EncodingError.invalidValue(self, EncodingError.Context.init(codingPath: [], debugDescription: "Top-level value must be array or object"))
+        }
+    }
+    
+    private func encode(object: [String: JSON], with c: KeyedEncodingContainer<JSON.CodingKeys>) throws {
+        var container = c
         
+        try object.forEach({ (key, value) in
+            let key = CodingKeys(stringValue: key)
+            
+            switch value {
+            case .null: try container.encodeNil(forKey: key)
+            case let .string(value): try container.encode(value, forKey: key)
+            case let .number(value): try container.encode(value, forKey: key)
+            case let .bool(value): try container.encode(value, forKey: key)
+            case let .object(value): try container.encode(value, forKey: key)
+            case let .array(value): try container.encode(value, forKey: key)
+            }
+        })
+    }
+    
+    private func encode(array: [JSON], with c: UnkeyedEncodingContainer) throws {
+        var container = c
+        
+        try array.forEach { (element) in
+            switch element {
+            case .null: try container.encodeNil()
+            case let .string(value): try container.encode(value)
+            case let .number(value): try container.encode(value)
+            case let .bool(value): try container.encode(value)
+            case let .object(value): try container.encode(value)
+            case let .array(value): try container.encode(value)
+            }
+        }
     }
     
     public struct CodingKeys: CodingKey {
