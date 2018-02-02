@@ -89,8 +89,12 @@ public enum JSON: Codable {
             case let .string(value): try container.encode(value, forKey: key)
             case let .number(value): try container.encode(value, forKey: key)
             case let .bool(value): try container.encode(value, forKey: key)
-            case let .object(value): try container.encode(value, forKey: key)
-            case let .array(value): try container.encode(value, forKey: key)
+            case let .object(value):
+                let con = container.nestedContainer(keyedBy: JSON.CodingKeys.self, forKey: key)
+                try encode(object: value, with: con)
+            case let .array(value):
+                let con = container.nestedUnkeyedContainer(forKey: key)
+                try encode(array: value, with: con)
             }
         })
     }
@@ -104,8 +108,12 @@ public enum JSON: Codable {
             case let .string(value): try container.encode(value)
             case let .number(value): try container.encode(value)
             case let .bool(value): try container.encode(value)
-            case let .object(value): try container.encode(value)
-            case let .array(value): try container.encode(value)
+            case let .object(value):
+                let con = container.nestedContainer(keyedBy: JSON.CodingKeys.self)
+                try encode(object: value, with: con)
+            case let .array(value):
+                let con = container.nestedUnkeyedContainer()
+                try encode(array: value, with: con)
             }
         }
     }
