@@ -52,7 +52,10 @@ class JSONTests: XCTestCase {
     }
     
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
-        ("testJSONDecoding", testJSONDecoding)
+        ("testJSONDecoding", testJSONDecoding),
+        ("testJSONEncoding", testJSONEncoding),
+        ("testDecodingSpeed", testDecodingSpeed),
+        ("testEncodingSpeed", testEncodingSpeed)
     ]
 }
 
