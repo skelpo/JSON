@@ -1,1 +1,3 @@
-public enum JSON {}
+public enum JSON {
+    case string(String)
+}
