@@ -171,3 +171,9 @@ extension JSON: ExpressibleByNilLiteral {
         self = .null
     }
 }
+
+extension JSON: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self = .string(value)
+    }
+}
