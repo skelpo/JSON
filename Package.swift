@@ -4,7 +4,7 @@ let package = Package(
     name: "JSON",
     products: [
         .library(name: "JSON", targets: ["JSON"]),
-        .library(name: "JSONKit", targets: ["JSONKit"]),
+        .library(name: "JSONKit", targets: ["JSONKit", "JSON"]),
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", .branch("beta"))
