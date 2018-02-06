@@ -201,3 +201,12 @@ extension JSON: ExpressibleByArrayLiteral {
         self = .array(elements)
     }
 }
+
+extension JSON: ExpressibleByDictionaryLiteral {
+    public init(dictionaryLiteral elements: (String, JSON)...) {
+        let structure: [String: JSON] = elements.reduce(into: [:]) { (dict, element) in
+            dict[element.0] = element.1
+        }
+        self = .object(structure)
+    }
+}
