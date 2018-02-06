@@ -33,7 +33,7 @@ extension Number: ExpressibleByIntegerLiteral {
 }
 
 extension Number: ExpressibleByFloatLiteral {
-    public init(floatLiteral value: Float) {
-        self = .float(value)
+    public init(floatLiteral value: Double) {
+        self = .double(value)
     }
 }
