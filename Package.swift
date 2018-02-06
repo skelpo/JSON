@@ -4,11 +4,13 @@ let package = Package(
     name: "JSON",
     products: [
         .library(name: "JSON", targets: ["JSON"]),
+        .library(name: "JSONKit", targets: ["JSONKit"]),
     ],
     dependencies: [
     ],
     targets: [
         .target(name: "JSON", dependencies: []),
-        .testTarget(name: "JSONTests", dependencies: ["JSON"]),
+        .target(name: "JSONKit", dependencies: ["JSON"]),
+        .testTarget(name: "JSONTests", dependencies: ["JSON", "JSONKit"]),
     ]
 )
