@@ -1,7 +1,17 @@
 import XCTest
 @testable import JSON
+@testable import JSONKit
 
 class JSONTests: XCTestCase {
+    private var userJSON: JSON = .object([
+        "isAdmin": JSON.bool(false),
+        "age": JSON.number(Number.int(17)),
+        "firstname": JSON.string("Caleb"),
+        "lastname": JSON.string("Kleveter"),
+        "username": JSON.string("caleb_kleveter"),
+        "password": JSON.string("fizzbuzzfoobar")
+    ])
+    
     func testJSONDecoding()throws {
         let data = json.data(using: .utf8)!
         let j = try JSONDecoder().decode(JSON.self, from: data)
@@ -51,12 +61,43 @@ class JSONTests: XCTestCase {
         }
     }
     
+    func testToJSON() {
+        let user = User(username: "caleb_kleveter", lastname: "Kleveter", firstname: "Caleb", age: 17, password: "fizzbuzzfoobar", isAdmin: false)
+        measure {
+            do {
+                self.userJSON = try user.json()
+            } catch let error {
+                XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testFromJSON() {
+        print(userJSON)
+        measure {
+            do {
+                _ = try User(json: userJSON)
+            } catch let error {
+                XCTFail("\(error)")
+            }
+        }
+    }
+    
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
         ("testJSONDecoding", testJSONDecoding),
         ("testJSONEncoding", testJSONEncoding),
         ("testDecodingSpeed", testDecodingSpeed),
         ("testEncodingSpeed", testEncodingSpeed)
     ]
+}
+
+fileprivate struct User: Codable {
+    let username: String
+    let lastname: String
+    let firstname: String
+    let age: Int
+    let password: String
+    let isAdmin: Bool
 }
 
 let json = """
