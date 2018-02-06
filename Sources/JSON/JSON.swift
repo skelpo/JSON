@@ -177,3 +177,9 @@ extension JSON: ExpressibleByStringLiteral {
         self = .string(value)
     }
 }
+
+extension JSON: ExpressibleByIntegerLiteral {
+    public init(integerLiteral value: Int) {
+        self = .number(.int(value))
+    }
+}
