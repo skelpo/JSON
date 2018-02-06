@@ -1,3 +1,5 @@
+import Foundation
+
 public enum JSON: Codable {
     
     // MARK: - Cases
@@ -9,6 +11,11 @@ public enum JSON: Codable {
     indirect case object([String: JSON])
     
     // MARK: - Public Methods
+    
+    public init(data: Data) throws {
+        self = try JSONDecoder().decode(JSON.self, from: data)
+    }
+    
     public init(from decoder: Decoder) throws {
         if let container = try? decoder.container(keyedBy: JSON.CodingKeys.self) {
             self = try JSON(from: container)
