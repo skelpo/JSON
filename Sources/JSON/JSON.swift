@@ -26,6 +26,10 @@ public enum JSON: Codable {
         }
     }
     
+    public func encoded()throws -> Data {
+        return try JSONEncoder().encode(self)
+    }
+    
     public func encode(to encoder: Encoder) throws {
         switch self {
         case let .object(structure):
