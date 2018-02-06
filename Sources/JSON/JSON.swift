@@ -165,3 +165,9 @@ public enum JSON: Codable {
         }
     }
 }
+
+extension JSON: ExpressibleByNilLiteral {
+    public init(nilLiteral: ()) {
+        self = .null
+    }
+}
