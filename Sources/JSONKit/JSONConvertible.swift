@@ -7,7 +7,7 @@ extension Decodable {
 }
 
 extension Encodable {
-    func json()throws -> JSON {
+    public func json()throws -> JSON {
         return try JSONDecoder().decode(JSON.self, from: JSONEncoder().encode(self))
     }
 }
