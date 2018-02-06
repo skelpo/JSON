@@ -195,3 +195,9 @@ extension JSON: ExpressibleByBooleanLiteral {
         self = .bool(value)
     }
 }
+
+extension JSON: ExpressibleByArrayLiteral {
+    public init(arrayLiteral elements: JSON...) {
+        self = .array(elements)
+    }
+}
