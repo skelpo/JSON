@@ -189,3 +189,9 @@ extension JSON: ExpressibleByFloatLiteral {
         self = .number(.double(value))
     }
 }
+
+extension JSON: ExpressibleByBooleanLiteral {
+    public init(booleanLiteral value: Bool) {
+        self = .bool(value)
+    }
+}
