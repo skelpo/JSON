@@ -183,3 +183,9 @@ extension JSON: ExpressibleByIntegerLiteral {
         self = .number(.int(value))
     }
 }
+
+extension JSON: ExpressibleByFloatLiteral {
+    public init(floatLiteral value: Double) {
+        self = .number(.double(value))
+    }
+}
