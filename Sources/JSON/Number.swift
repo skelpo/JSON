@@ -31,3 +31,9 @@ extension Number: ExpressibleByIntegerLiteral {
         self = .int(value)
     }
 }
+
+extension Number: ExpressibleByFloatLiteral {
+    public init(floatLiteral value: Float) {
+        self = .float(value)
+    }
+}
