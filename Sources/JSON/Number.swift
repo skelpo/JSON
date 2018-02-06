@@ -25,3 +25,9 @@ public enum Number: Codable {
         }
     }
 }
+
+extension Number: ExpressibleByIntegerLiteral {
+    public init(integerLiteral value: Int) {
+        self = .int(value)
+    }
+}
