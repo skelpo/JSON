@@ -2,6 +2,8 @@ import Foundation
 
 // MARK: - Protocols
 
+public typealias JSONRepresentable = SafeJSONRepresentable & FailableJSONRepresentable
+
 public protocol SafeJSONRepresentable {
     var json: JSON { get }
 }
