@@ -1,5 +1,3 @@
-import Foundation
-
 public enum JSON: Codable {
     
     // MARK: - Cases
@@ -12,10 +10,6 @@ public enum JSON: Codable {
     
     // MARK: - Public Methods
     
-    public init(data: Data) throws {
-        self = try JSONDecoder().decode(JSON.self, from: data)
-    }
-    
     public init(from decoder: Decoder) throws {
         if let container = try? decoder.container(keyedBy: JSON.CodingKeys.self) {
             self = try JSON(from: container)
@@ -24,10 +18,6 @@ public enum JSON: Codable {
         } else {
             throw DecodingError.dataCorrupted(DecodingError.Context.init(codingPath: [], debugDescription: "No top-level object or array found"))
         }
-    }
-    
-    public func encoded()throws -> Data {
-        return try JSONEncoder().encode(self)
     }
     
     public func encode(to encoder: Encoder) throws {
