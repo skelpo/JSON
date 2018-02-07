@@ -1,5 +1,9 @@
 import Foundation
 
+public protocol JSONRepresentable {
+    var json: JSON { get }
+}
+
 extension Decodable {
     public init(json: JSON)throws {
         self = try JSONDecoder().decode(Self.self, from: json.encoded())
