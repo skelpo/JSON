@@ -9,3 +9,9 @@ extension Int: JSONRepresentable {
         return .number(.int(self))
     }
 }
+
+extension Float: JSONRepresentable {
+    public var json: JSON {
+        return .number(.float(self))
+    }
+}
