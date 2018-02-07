@@ -20,12 +20,6 @@ extension FailableJSONRepresentable where Self: SafeJSONRepresentable {
     }
 }
 
-extension FailableJSONRepresentable where Self: Encodable {
-    public func failableJSON()throws -> JSON {
-        return try (self as Encodable).json()
-    }
-}
-
 extension Decodable {
     public init(json: JSON)throws {
         self = try JSONDecoder().decode(Self.self, from: json.encoded())
