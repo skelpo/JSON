@@ -27,3 +27,9 @@ extension Bool: JSONRepresentable {
         return .bool(self)
     }
 }
+
+extension Array: JSONRepresentable where Element: JSONRepresentable {
+    public var json: JSON {
+        return .array(self.map({ $0.json }))
+    }
+}
