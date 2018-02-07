@@ -3,14 +3,14 @@ import XCTest
 @testable import JSONKit
 
 class JSONTests: XCTestCase {
-    private var userJSON: JSON = .object([
-        "isAdmin": JSON.bool(false),
-        "age": JSON.number(Number.int(17)),
-        "firstname": JSON.string("Caleb"),
-        "lastname": JSON.string("Kleveter"),
-        "username": JSON.string("caleb_kleveter"),
-        "password": JSON.string("fizzbuzzfoobar")
-    ])
+    private var userJSON: JSON = [
+        "isAdmin": false,
+        "age": 17,
+        "firstname": "Caleb",
+        "lastname": "Kleveter",
+        "username": "caleb_kleveter",
+        "password": "fizzbuzzfoobar"
+    ]
     
     func testJSONDecoding()throws {
         let data = json.data(using: .utf8)!
