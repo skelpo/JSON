@@ -1,3 +1,12 @@
+extension Optional where Wrapped: JSONRepresentable {
+    public var json: JSON {
+        switch self {
+        case .none: return .null
+        case let .some(value): return value.json
+        }
+    }
+}
+
 extension String: JSONRepresentable {
     public var json: JSON {
         return .string(self)
