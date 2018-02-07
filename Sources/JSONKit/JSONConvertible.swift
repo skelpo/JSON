@@ -31,3 +31,12 @@ extension Encodable {
         return try JSONDecoder().decode(JSON.self, from: JSONEncoder().encode(self))
     }
 }
+
+extension JSON {
+    public init(dictionaryLiteral elements: (String, SafeJSONRepresentable)...) {
+        let structure: [String: JSON] = elements.reduce(into: [:]) { (dict, element) in
+            dict[element.0] = element.1.json
+        }
+        self = .object(structure)
+    }
+}
