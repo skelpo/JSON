@@ -29,16 +29,17 @@ extension JSON: ExpressibleByBooleanLiteral {
 }
 
 extension JSON: ExpressibleByArrayLiteral {
-    public init(arrayLiteral elements: JSON...) {
-        self = .array(elements)
+    public init(arrayLiteral elements: SafeJSONRepresentable...) {
+        self = .array(elements.map({ $0.json }))
     }
 }
 
 extension JSON: ExpressibleByDictionaryLiteral {
-    public init(dictionaryLiteral elements: (String, JSON)...) {
+    public init(dictionaryLiteral elements: (String, SafeJSONRepresentable)...) {
         let structure: [String: JSON] = elements.reduce(into: [:]) { (dict, element) in
-            dict[element.0] = element.1
+            dict[element.0] = element.1.json
         }
         self = .object(structure)
     }
 }
+

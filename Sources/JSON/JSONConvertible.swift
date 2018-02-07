@@ -17,13 +17,3 @@ extension FailableJSONRepresentable where Self: SafeJSONRepresentable {
         return self.json
     }
 }
-
-extension JSON {
-    public init(dictionaryLiteral elements: (String, SafeJSONRepresentable)...) {
-        let structure: [String: JSON] = elements.reduce(into: [:]) { (dict, element) in
-            dict[element.0] = element.1.json
-        }
-        self = .object(structure)
-    }
-}
-
