@@ -1,3 +1,9 @@
+extension JSON: JSONRepresentable {
+    public var json: JSON {
+        return self
+    }
+}
+
 extension Optional where Wrapped: JSONRepresentable {
     public var json: JSON {
         switch self {
