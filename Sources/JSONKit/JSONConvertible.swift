@@ -7,19 +7,19 @@ public protocol JSONRepresentable {
 }
 
 public protocol FailableJSONRepresentable {
-    func json()throws -> JSON
+    func failableJSON()throws -> JSON
 }
 
 // MARK: - Default Converters
 
 extension FailableJSONRepresentable where Self: JSONRepresentable {
-    public func json()throws -> JSON {
+    public func failableJSON()throws -> JSON {
         return self.json
     }
 }
 
 extension FailableJSONRepresentable where Self: Encodable {
-    public func json()throws -> JSON {
+    public func failableJSON()throws -> JSON {
         return try (self as Encodable).json()
     }
 }
