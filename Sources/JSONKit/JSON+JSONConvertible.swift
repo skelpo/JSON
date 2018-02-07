@@ -15,3 +15,9 @@ extension Float: JSONRepresentable {
         return .number(.float(self))
     }
 }
+
+extension Double: JSONRepresentable {
+    public var json: JSON {
+        return .number(.double(self))
+    }
+}
