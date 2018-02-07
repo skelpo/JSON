@@ -3,3 +3,9 @@ extension String: JSONRepresentable {
         return .string(self)
     }
 }
+
+extension Int: JSONRepresentable {
+    public var json: JSON {
+        return .number(.int(self))
+    }
+}
