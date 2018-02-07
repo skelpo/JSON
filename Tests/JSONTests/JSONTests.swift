@@ -87,7 +87,9 @@ class JSONTests: XCTestCase {
         ("testJSONDecoding", testJSONDecoding),
         ("testJSONEncoding", testJSONEncoding),
         ("testDecodingSpeed", testDecodingSpeed),
-        ("testEncodingSpeed", testEncodingSpeed)
+        ("testEncodingSpeed", testEncodingSpeed),
+        ("testToJSON", testToJSON),
+        ("testFromJSON", testFromJSON)
     ]
 }
 
