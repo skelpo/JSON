@@ -33,3 +33,11 @@ extension Array: JSONRepresentable where Element: JSONRepresentable {
         return .array(self.map({ $0.json }))
     }
 }
+
+extension Dictionary: JSONRepresentable where Key == String, Value: JSONRepresentable {
+    public var json: JSON {
+        return .object(self.reduce(into: [:], { (data, element) in
+            data[element.key] = element.value.json
+        }))
+    }
+}
