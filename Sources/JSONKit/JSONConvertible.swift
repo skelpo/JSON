@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Protocols
 
-public protocol JSONRepresentable {
+public protocol SafeJSONRepresentable {
     var json: JSON { get }
 }
 
@@ -12,7 +12,7 @@ public protocol FailableJSONRepresentable {
 
 // MARK: - Default Converters
 
-extension FailableJSONRepresentable where Self: JSONRepresentable {
+extension FailableJSONRepresentable where Self: SafeJSONRepresentable {
     public func failableJSON()throws -> JSON {
         return self.json
     }
