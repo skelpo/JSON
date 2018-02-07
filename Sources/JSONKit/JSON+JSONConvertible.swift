@@ -21,3 +21,9 @@ extension Double: JSONRepresentable {
         return .number(.double(self))
     }
 }
+
+extension Bool: JSONRepresentable {
+    public var json: JSON {
+        return .bool(self)
+    }
+}
