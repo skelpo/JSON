@@ -59,6 +59,20 @@ public enum JSON: Codable {
         return .object(this)
     }
     
+    public func element(at path: [String])throws -> JSON {
+        var current: JSON = self
+        
+        try path.forEach { (key) in
+            switch current {
+            case .object: current = try current.getSingleLevelElement(with: key)
+            case .array: current = try current.getElementsFromArray(with: key)
+            default: throw JSONError.badPathAtKey(path, key)
+            }
+        }
+        
+        return current
+    }
+    
     // MARK: - Sub-Types
     
     public struct CodingKeys: CodingKey {
@@ -75,7 +89,36 @@ public enum JSON: Codable {
         }
     }
     
-    // MARK: - Private Helper Coding Methods
+    // MARK: - Private Helper Methods
+
+    
+    private func getSingleLevelElement(with key: String)throws -> JSON {
+        guard case let JSON.object(data) = self else {
+            throw JSONError.invalidOperationForStructure(self)
+        }
+        guard let element = data[key] else {
+            throw JSONError.badPathAtKey([key], key)
+        }
+        return element
+    }
+    
+    private func getElementsFromArray(with key: String)throws -> JSON {
+        guard case let JSON.array(sequence) = self else {
+            throw JSONError.invalidOperationForStructure(self)
+        }
+        let elements = try sequence.map { (element) -> JSON in
+            switch element {
+            case let .object(data):
+                guard let value = data[key] else {
+                    throw JSONError.badPathAtKey([key], key)
+                }
+                return value
+            case .array: return try element.getElementsFromArray(with: key)
+            default: throw JSONError.badPathAtKey([key], key)
+            }
+        }
+        return .array(elements)
+    }
     
     private init(from container: KeyedDecodingContainer<JSON.CodingKeys>)throws {
         var object: [String: JSON] = [:]
