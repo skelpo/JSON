@@ -33,6 +33,15 @@ public enum JSON: Codable {
         }
     }
     
+    public mutating func insert(_ json: JSON, at index: Int)throws {
+        switch self {
+        case var .array(sequence):
+            sequence.insert(json, at: index)
+            self = .array(sequence)
+        default: throw JSONError.unableToMergeCases(self, json)
+        }
+    }
+    
     public mutating func append(_ json: JSON)throws {
         switch self {
         case var .array(sequence):
@@ -71,6 +80,14 @@ public enum JSON: Codable {
         }
         
         return current
+    }
+    
+    public var count: Int? {
+        switch self {
+        case let .array(sequence): return sequence.count
+        case let .object(structure): return structure.count
+        default: return nil
+        }
     }
     
     // MARK: - Sub-Types
