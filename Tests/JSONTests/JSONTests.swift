@@ -1,16 +1,9 @@
 import XCTest
-@testable import JSON
+//@testable import JSON
 @testable import JSONKit
 
 class JSONTests: XCTestCase {
-    private var userJSON: JSON = [
-        "isAdmin": false,
-        "age": 17,
-        "firstname": "Caleb",
-        "lastname": "Kleveter",
-        "username": "caleb_kleveter",
-        "password": "fizzbuzzfoobar"
-    ]
+    private var userJSON: JSON!
     
     func testJSONDecoding()throws {
         let data = json.data(using: .utf8)!
@@ -63,20 +56,23 @@ class JSONTests: XCTestCase {
     
     func testToJSON() {
         let user = User(username: "caleb_kleveter", lastname: "Kleveter", firstname: "Caleb", age: 17, password: "fizzbuzzfoobar", isAdmin: false)
-        measure {
-            do {
-                self.userJSON = try user.json()
-            } catch let error {
-                XCTFail("\(error)")
-            }
-        }
+        let j = try! user.json()
+        print(j)
+//        measure {
+//            do {
+//                self.userJSON = try user.json()
+//                print(self.userJSON)
+//            } catch let error {
+//                XCTFail("\(error)")
+//            }
+//        }
     }
     
     func testFromJSON() {
-        print(userJSON)
         measure {
             do {
-                _ = try User(json: userJSON)
+                let user = try User(json: userJSON)
+                print(user)
             } catch let error {
                 XCTFail("\(error)")
             }
