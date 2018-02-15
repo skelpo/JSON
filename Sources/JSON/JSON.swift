@@ -64,6 +64,10 @@ public enum JSON: Codable {
         }
     }
     
+    public mutating func set(_ key: String, to json: FailableJSONRepresentable)throws {
+        try self.set(key, json.failableJSON())
+    }
+    
     public func merge(_ json: JSON)throws -> JSON {
         guard case let JSON.object(new) = json, case var JSON.object(this) = self else {
             throw JSONError.unableToMergeCases(self, json)
