@@ -51,6 +51,10 @@ public enum JSON: Codable {
         }
     }
     
+    public mutating func append(_ json: FailableJSONRepresentable)throws {
+        try self.append(json.failableJSON())
+    }
+    
     public mutating func set(_ key: String, _ json: JSON)throws {
         switch self {
         case var .object(structure):
