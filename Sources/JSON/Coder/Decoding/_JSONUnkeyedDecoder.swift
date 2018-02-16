@@ -5,10 +5,9 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
     var currentIndex: Int
     var codingPath: [CodingKey]
     let json: [JSON]
-    let decoder: _JSONDecoder
     
-    init(referance: _JSONDecoder, wrapping json: JSON) {
-        self.codingPath = referance.codingPath
+    init(at path: [CodingKey], wrapping json: JSON) {
+        self.codingPath = path
         self.currentIndex = 0
         
         precondition(json.isArray, "JSON must have an array structure")
@@ -18,7 +17,6 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
         
         self.json = elements
         self.count = elements.count
-        self.decoder = referance
     }
     
     var isAtEnd: Bool {
@@ -70,9 +68,6 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
     
     // TODO: - https://github.com/apple/swift/blob/master/stdlib/public/SDK/Foundation/JSONEncoder.swift#L1852
     mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-        self.decoder.codingPath.append(JSON.CodingKeys(intValue: self.currentIndex))
-        defer { self.decoder.codingPath.removeLast() }
-        
         guard !self.isAtEnd else {
             throw DecodingError.valueNotFound(
                 KeyedDecodingContainer<NestedKey>.self,
@@ -85,18 +80,15 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
         
         let value = self.json[self.currentIndex]
         guard value.isObject else {
-            throw DecodingError.expectedType([String: JSON].self, at: self.codingPath, from: value)
+            throw DecodingError.expectedType([String: JSON].self, at: self.codingPath + [JSON.CodingKeys(intValue: self.currentIndex)], from: value)
         }
         
         self.currentIndex += 1
-        let container = _JSONValueDecoder<NestedKey>(referance: self.decoder, wrapping: value)
+        let container = _JSONKeyedValueDecoder<NestedKey>(at: self.codingPath + [JSON.CodingKeys(intValue: self.currentIndex)], wrapping: value)
         return KeyedDecodingContainer(container)
     }
     
     mutating func nestedUnkeyedContainer() throws -> UnkeyedDecodingContainer {
-        self.decoder.codingPath.append(JSON.CodingKeys(intValue: self.currentIndex))
-        defer { self.decoder.codingPath.removeLast() }
-        
         guard !self.isAtEnd else {
             throw DecodingError.valueNotFound(
                 UnkeyedDecodingContainer.self,
@@ -109,17 +101,14 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
         
         let value = self.json[self.currentIndex]
         guard value.isArray else {
-            throw DecodingError.expectedType([JSON].self, at: self.codingPath, from: value)
+            throw DecodingError.expectedType([JSON].self, at: self.codingPath + [JSON.CodingKeys(intValue: self.currentIndex)], from: value)
         }
         
         self.currentIndex += 1
-        return _JSONUnkeyedDecoder(referance: self.decoder, wrapping: value)
+        return _JSONUnkeyedDecoder(at: self.codingPath + [JSON.CodingKeys(intValue: self.currentIndex)], wrapping: value)
     }
     
     mutating func superDecoder() throws -> Decoder {
-        self.decoder.codingPath.append(JSON.CodingKeys(intValue: self.currentIndex))
-        defer { self.decoder.codingPath.removeLast() }
-        
         guard !self.isAtEnd else {
             throw DecodingError.valueNotFound(
                 UnkeyedDecodingContainer.self,
@@ -133,7 +122,7 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
         let value = self.json[self.currentIndex]
         self.currentIndex += 1
         
-        return _JSONDecoder(codingPath: self.decoder.codingPath, json: value)
+        return _JSONDecoder(codingPath: self.codingPath + [JSON.CodingKeys(intValue: self.currentIndex)], json: value)
     }
 }
 

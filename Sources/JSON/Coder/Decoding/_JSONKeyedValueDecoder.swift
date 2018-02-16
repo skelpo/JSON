@@ -1,15 +1,13 @@
 import Foundation
 
-internal struct _JSONValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol {
+internal struct _JSONKeyedValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol {
     typealias Key = K
     
     var json: [String: JSON]
     var codingPath: [CodingKey]
-    var decoder: _JSONDecoder
     
-    init(referance: _JSONDecoder, wrapping json: JSON) {
-        self.decoder = referance
-        self.codingPath = decoder.codingPath
+    init(at path: [CodingKey], wrapping json: JSON) {
+        self.codingPath = path
         
         precondition(json.isObject, "JSON must have an object structure")
         guard case let JSON.object(structure) = json else {
@@ -28,7 +26,7 @@ internal struct _JSONValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol 
     
     func decodeNil(forKey key: Key) throws -> Bool {
         guard let entry = self.json[key.stringValue] else {
-            throw DecodingError.badKey(key, at: self.decoder.codingPath)
+            throw DecodingError.badKey(key, at: self.codingPath)
         }
         
         guard case JSON.null = entry else {
@@ -39,10 +37,10 @@ internal struct _JSONValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol 
     
     func _decode<T>(_ type: T.Type, forKey key: Key)throws -> T where T: Decodable {
         guard let json = self.json[key.stringValue] else {
-            throw DecodingError.badKey(key, at: self.decoder.codingPath)
+            throw DecodingError.badKey(key, at: self.codingPath)
         }
         
-        return try json.value(for: type, at: self.decoder.codingPath)
+        return try json.value(for: type, at: self.codingPath)
     }
     
     func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
@@ -66,11 +64,8 @@ internal struct _JSONValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol 
     }
     
     private func _superDecoder(forKey key: CodingKey) throws -> Decoder {
-        self.decoder.codingPath.append(key)
-        defer { self.decoder.codingPath.removeLast() }
-        
         let value = self.json[key.stringValue] ?? JSON.null
-        return _JSONDecoder(codingPath: self.decoder.codingPath, json: value)
+        return _JSONDecoder(codingPath: self.codingPath + [key], json: value)
     }
     
     func superDecoder() throws -> Decoder {
@@ -82,9 +77,6 @@ internal struct _JSONValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol 
     }
     
     func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-        self.decoder.codingPath.append(key)
-        defer { self.decoder.codingPath.removeLast() }
-        
         guard let value = self.json[key.stringValue] else {
             throw DecodingError.keyNotFound(
                 key,
@@ -95,17 +87,14 @@ internal struct _JSONValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol 
         }
         
         guard value.isObject else {
-            throw DecodingError.expectedType([String: JSON].self, at: self.decoder.codingPath, from: value)
+            throw DecodingError.expectedType([String: JSON].self, at: self.codingPath + [key], from: value)
         }
         
-        let container = _JSONValueDecoder<NestedKey>.init(referance: self.decoder, wrapping: value)
+        let container = _JSONKeyedValueDecoder<NestedKey>.init(at: self.codingPath + [key], wrapping: value)
         return KeyedDecodingContainer(container)
     }
     
     func nestedUnkeyedContainer(forKey key: Key) throws -> UnkeyedDecodingContainer {
-        self.decoder.codingPath.append(key)
-        defer { self.decoder.codingPath.removeLast() }
-        
         guard let value = self.json[key.stringValue] else {
             throw DecodingError.keyNotFound(
                 key,
@@ -118,11 +107,11 @@ internal struct _JSONValueDecoder<K: CodingKey>: KeyedDecodingContainerProtocol 
         guard value.isArray else {
             throw DecodingError.typeMismatch(
                 [JSON].self,
-                DecodingError.Context(codingPath: self.decoder.codingPath, debugDescription: "Cannot create UnkeyedContainer from non-array data structure")
+                DecodingError.Context(codingPath: self.codingPath + [key], debugDescription: "Cannot create UnkeyedContainer from non-array data structure")
             )
         }
         
-        return _JSONUnkeyedDecoder(referance: self.decoder, wrapping: value)
+        return _JSONUnkeyedDecoder(at: self.codingPath + [key], wrapping: value)
     }
 }
 
