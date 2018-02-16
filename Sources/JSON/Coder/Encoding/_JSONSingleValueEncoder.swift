@@ -7,12 +7,20 @@ extension _JSONEncoder: SingleValueEncodingContainer {
     
     func _encode<T>(_ value: T) where T: SafeJSONRepresentable {
         assertCanEncodeNewValue()
-        self.json = value.json
+        if self.container != nil {
+            self.container.json = value.json
+        } else {
+            self.container = JSONContainer(json: value.json)
+        }
     }
     
     public func encodeNil() throws {
         assertCanEncodeNewValue()
-        self.json = .null
+        if self.container != nil {
+            self.container.json = .null
+        } else {
+            self.container = JSONContainer(json: .null)
+        }
     }
     
     public func encode(_ value: Bool) throws {

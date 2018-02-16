@@ -4,9 +4,9 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     typealias Key = K
     
     var codingPath: [CodingKey]
-    var json: JSON
+    var json: JSONContainer
     
-    init(at codingPath: [CodingKey], wrapping json: JSON) {
+    init(at codingPath: [CodingKey], wrapping json: JSONContainer) {
         self.codingPath = codingPath
         
         precondition(json.isObject, "JSON must have an object structure")
@@ -38,24 +38,24 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     }
     
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {        
-        let encoder = _JSONEncoder(codingPath: self.codingPath + [key], json: [:])
+        let encoder = _JSONEncoder(codingPath: self.codingPath + [key], json: JSONContainer(json: [:]))
         try value.encode(to: encoder)
-        try self.json.set(key.stringValue, encoder.json)
+        try self.json.set(key.stringValue, encoder.container.json)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: K) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
-        let json: JSON = [:]
-        try! self.json.set(key.stringValue, json)
+        let jsonContainer = JSONContainer(json: [:])
+        try! self.json.set(key.stringValue, jsonContainer.json)
         
-        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [key], wrapping: json)
+        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [key], wrapping: jsonContainer)
         return KeyedEncodingContainer(container)
     }
     
     func nestedUnkeyedContainer(forKey key: K) -> UnkeyedEncodingContainer {
-        let json: JSON = []
-        try! self.json.set(key.stringValue, json)
+        let jsonContainer = JSONContainer(json: [])
+        try! self.json.set(key.stringValue, jsonContainer.json)
         
-        return _JSONUnkeyedEncoder(at: self.codingPath + [key], wrapping: json)
+        return _JSONUnkeyedEncoder(at: self.codingPath + [key], wrapping: jsonContainer)
     }
     
     func superEncoder() -> Encoder {

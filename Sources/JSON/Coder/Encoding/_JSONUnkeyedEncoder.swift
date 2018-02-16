@@ -2,9 +2,9 @@ import Foundation
 
 internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     var codingPath: [CodingKey]
-    var json: JSON
+    var json: JSONContainer
     
-    init(at codingPath: [CodingKey], wrapping json: JSON) {
+    init(at codingPath: [CodingKey], wrapping json: JSONContainer) {
         self.codingPath = codingPath
         
         precondition(json.isArray, "JSON structure must be an array")
@@ -23,24 +23,24 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     public func encode(_ value: Double) throws { try self.json.append(value) }
     
     public func encode<T : Encodable>(_ value: T) throws {
-        let encoder = _JSONEncoder(codingPath: self.codingPath + [JSON.CodingKeys(intValue: self.count)], json: [:])
+        let encoder = _JSONEncoder(codingPath: self.codingPath + [JSON.CodingKeys(intValue: self.count)], json: JSONContainer(json: [:]))
         try value.encode(to: encoder)
-        try self.json.append(encoder.json)
+        try self.json.append(encoder.container.json)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
-        let dictionary: JSON = [:]
-        try! self.json.append(dictionary)
+        let dictionary = JSONContainer(json: [:])
+        try! self.json.append(dictionary.json)
         
         let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: dictionary)
         return KeyedEncodingContainer(container)
     }
     
     func nestedUnkeyedContainer() -> UnkeyedEncodingContainer {
-        let dictionary: JSON = [:]
-        try! self.json.append(dictionary)
+        let array = JSONContainer(json: [])
+        try! self.json.append(array.json)
         
-        return _JSONUnkeyedEncoder(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: dictionary)
+        return _JSONUnkeyedEncoder(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: array)
     }
     
     func superEncoder() -> Encoder {
