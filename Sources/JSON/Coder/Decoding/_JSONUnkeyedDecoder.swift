@@ -54,6 +54,10 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
         return try self.pop(as: type)
     }
     
+    mutating func decode(_ type: Float.Type) throws -> Float {
+        return try self.pop(as: type)
+    }
+    
     mutating func decode(_ type: Double.Type) throws -> Double {
         return try self.pop(as: type)
     }

@@ -24,6 +24,10 @@ internal struct _JSONSingleValueDecoder: SingleValueDecodingContainer {
         return try self.json.value(for: type, at: self.codingPath)
     }
     
+    func decode(_ type: Float.Type) throws -> Float {
+        return try self.json.value(for: type, at: self.codingPath)
+    }
+    
     func decode(_ type: Double.Type) throws -> Double {
         return try self.json.value(for: type, at: self.codingPath)
     }
