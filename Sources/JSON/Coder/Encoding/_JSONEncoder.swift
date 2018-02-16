@@ -11,10 +11,6 @@ internal final class _JSONEncoder: Encoder {
         self.container = json
     }
     
-    var canEncodeNewValue: Bool {
-        return (self.container.count == nil ? 1 : self.container.count!) == self.codingPath.count
-    }
-    
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
         if self.container == nil { self.container = JSONContainer(json: [:]) }
         precondition(self.container.isObject, "JSON must have an object structure")
