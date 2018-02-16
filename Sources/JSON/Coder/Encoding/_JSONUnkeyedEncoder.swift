@@ -23,24 +23,18 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     public func encode(_ value: Double) throws { try self.json.append(value) }
     
     public func encode<T : Encodable>(_ value: T) throws {
-        let encoder = _JSONEncoder(codingPath: self.codingPath + [JSON.CodingKeys(intValue: self.count)], json: JSONContainer(json: [:]))
+        let encoder = _JSONEncoder(codingPath: self.codingPath + [JSON.CodingKeys(intValue: self.count)])
         try value.encode(to: encoder)
         try self.json.append(encoder.container.json)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
-        let dictionary = JSONContainer(json: [:])
-        try! self.json.append(dictionary.json)
-        
-        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: dictionary)
-        return KeyedEncodingContainer(container)
+        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: self.json)
+        return .init(container)
     }
     
     func nestedUnkeyedContainer() -> UnkeyedEncodingContainer {
-        let array = JSONContainer(json: [])
-        try! self.json.append(array.json)
-        
-        return _JSONUnkeyedEncoder(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: array)
+        return _JSONUnkeyedEncoder(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: self.json)
     }
     
     func superEncoder() -> Encoder {

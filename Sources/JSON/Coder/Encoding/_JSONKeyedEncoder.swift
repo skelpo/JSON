@@ -38,24 +38,18 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     }
     
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {        
-        let encoder = _JSONEncoder(codingPath: self.codingPath + [key], json: JSONContainer(json: [:]))
+        let encoder = _JSONEncoder(codingPath: self.codingPath + [key])
         try value.encode(to: encoder)
         try self.json.set(key.stringValue, encoder.container.json)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: K) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
-        let jsonContainer = JSONContainer(json: [:])
-        try! self.json.set(key.stringValue, jsonContainer.json)
-        
-        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [key], wrapping: jsonContainer)
-        return KeyedEncodingContainer(container)
+        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [key], wrapping: self.json)
+        return .init(container)
     }
     
     func nestedUnkeyedContainer(forKey key: K) -> UnkeyedEncodingContainer {
-        let jsonContainer = JSONContainer(json: [])
-        try! self.json.set(key.stringValue, jsonContainer.json)
-        
-        return _JSONUnkeyedEncoder(at: self.codingPath + [key], wrapping: jsonContainer)
+        return _JSONUnkeyedEncoder(at: self.codingPath + [key], wrapping: self.json)
     }
     
     func superEncoder() -> Encoder {
