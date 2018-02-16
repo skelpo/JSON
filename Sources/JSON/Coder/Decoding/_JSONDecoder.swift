@@ -30,7 +30,7 @@ internal final class _JSONDecoder: Decoder {
     }
     
     func singleValueContainer() throws -> SingleValueDecodingContainer {
-        return self
+        return _JSONSingleValueDecoder(at: self.codingPath, wrapping: self.json)
     }
     
     static func decode<T>(_ type: T.Type, from json: JSON)throws -> T where T: Decodable {
