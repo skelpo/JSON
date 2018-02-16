@@ -1,6 +1,14 @@
 import Foundation
 
-extension _JSONDecoder: SingleValueDecodingContainer {
+internal struct _JSONSingleValueDecoder: SingleValueDecodingContainer {
+    var codingPath: [CodingKey]
+    let json: JSON
+    
+    init(at path: [CodingKey], wrapping json: JSON) {
+        self.codingPath = path
+        self.json = json
+    }
+    
     func decodeNil() -> Bool {
         guard case JSON.null = json else {
             return false
@@ -13,7 +21,7 @@ extension _JSONDecoder: SingleValueDecodingContainer {
     }
     
     func decode(_ type: Int.Type) throws -> Int {
-       return try self.json.value(for: type, at: self.codingPath)
+        return try self.json.value(for: type, at: self.codingPath)
     }
     
     func decode(_ type: Double.Type) throws -> Double {
@@ -25,6 +33,8 @@ extension _JSONDecoder: SingleValueDecodingContainer {
     }
     
     func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
-        return try self.json.value(for: type, at: self.codingPath)
+        let decoder = _JSONDecoder(codingPath: self.codingPath, json: self.json)
+        return try T.init(from: decoder)
+        // return try self.json.value(for: type, at: self.codingPath)
     }
 }

@@ -31,7 +31,8 @@ internal final class _JSONEncoder: Encoder {
     }
     
     func singleValueContainer() -> SingleValueEncodingContainer {
-        return self
+        if self.container == nil { self.container = JSONContainer(json: .null) }
+        return _JSONSingleValueEncoder(at: self.codingPath, wrapping: self.container)
     }
     
     static func encode<T>(_ t: T)throws -> JSON where T: Encodable {
