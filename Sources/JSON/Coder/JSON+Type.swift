@@ -25,35 +25,45 @@ extension JSON {
             }
             return value as! T
         case is Int.Type:
-            guard case let JSON.number(number) = self else {
-                throw error
-            }
-            guard case let Number.int(value) = number else {
-                throw error
-            }
-            return value as! T
+            return try self.number(at: path, as: Int.self) as! T
         case is Float.Type:
-            guard case let JSON.number(number) = self else {
-                throw error
-            }
-            guard case let Number.float(value) = number else {
-                throw error
-            }
-            return value as! T
+            return try self.number(at: path, as: Float.self) as! T
         case is Double.Type:
-            guard case let JSON.number(number) = self else {
-                throw error
-            }
-            guard case let Number.double(value) = number else {
-                throw error
-            }
-            return value as! T
+            return try self.number(at: path, as: Double.self) as! T
         case is String.Type:
             guard case let JSON.string(value) = self else {
                 throw error
             }
             return value as! T
         default: return try _JSONDecoder.decode(T.self, from: json)
+        }
+    }
+    
+    fileprivate func number<T: SignedInteger>(at path: [CodingKey], as type: T.Type)throws -> T {
+        let error = DecodingError.expectedType(T.self, at: path, from: self)
+
+        guard case let JSON.number(number) = self else {
+            throw error
+        }
+        
+        switch number {
+        case let .int(value): return T.init(value)
+        case let .float(value): return T.init(value)
+        case let .double(value): return T.init(value)
+        }
+    }
+    
+    fileprivate func number<T: BinaryFloatingPoint>(at path: [CodingKey], as type: T.Type)throws -> T {
+        let error = DecodingError.expectedType(T.self, at: path, from: self)
+        
+        guard case let JSON.number(number) = self else {
+            throw error
+        }
+        
+        switch number {
+        case let .int(value): return T.init(value)
+        case let .float(value): return T.init(value)
+        case let .double(value): return T.init(value)
         }
     }
 }
