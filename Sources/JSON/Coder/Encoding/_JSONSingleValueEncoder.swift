@@ -1,26 +1,20 @@
 import Foundation
 
-extension _JSONEncoder: SingleValueEncodingContainer {
-    fileprivate func assertCanEncodeNewValue() {
-        precondition(self.canEncodeNewValue, "Attempt to encode value through single value container when previously value already encoded.")
+internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
+    var codingPath: [CodingKey]
+    var container: JSONContainer
+    
+    init(at codingPath: [CodingKey], wrapping container: JSONContainer) {
+        self.codingPath = codingPath
+        self.container = container
     }
     
     func _encode<T>(_ value: T) where T: SafeJSONRepresentable {
-        assertCanEncodeNewValue()
-        if self.container != nil {
-            self.container.json = value.json
-        } else {
-            self.container = JSONContainer(json: value.json)
-        }
+        self.container = JSONContainer(json: value.json)
     }
     
     public func encodeNil() throws {
-        assertCanEncodeNewValue()
-        if self.container != nil {
-            self.container.json = .null
-        } else {
-            self.container = JSONContainer(json: .null)
-        }
+        _encode(JSON.null)
     }
     
     public func encode(_ value: Bool) throws {
@@ -44,7 +38,8 @@ extension _JSONEncoder: SingleValueEncodingContainer {
     }
     
     public func encode<T : Encodable>(_ value: T) throws {
-        assertCanEncodeNewValue()
-        try value.encode(to: self)
+        let encoder = _JSONEncoder(codingPath: self.codingPath)
+        try value.encode(to: encoder)
+        self.container.json = encoder.container.json
     }
 }
