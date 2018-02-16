@@ -82,13 +82,63 @@ class JSONTests: XCTestCase {
         }
     }
     
+    func testEncodingNestedJSON() {
+        do {
+            let data = json.data(using: .utf8)!
+            let weather = try JSONDecoder().decode(WeatherData.self, from: data)
+            _ = try JSONCoder.encode(weather)
+        } catch let error {
+            XCTFail("\(error)")
+        }
+    }
+    
+    func testEncodeNestedJSONSpeed() {
+        let data = json.data(using: .utf8)!
+        let weather = try! JSONDecoder().decode(WeatherData.self, from: data)
+        
+        measure {
+            do {
+                _ = try JSONCoder.encode(weather)
+            } catch let error {
+                XCTFail("\n\(error)\n")
+            }
+        }
+    }
+    
+    func testDecodingNestedJSON() {
+        do {
+            let data = json.data(using: .utf8)!
+            let j = try JSON(data: data)
+            _ = try JSONCoder.decode(WeatherData.self, from: j)
+        } catch let error {
+            XCTFail("\(error)")
+        }
+    }
+    
+    func testDecodeNestedJSONSpeed() {
+        let data = json.data(using: .utf8)!
+        let j = try! JSON(data: data)
+        
+        measure {
+            do {
+                _ = try JSONCoder.decode(WeatherData.self, from: j)
+            } catch let error {
+                XCTFail("\(error)")
+            }
+        }
+    }
+    
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
         ("testJSONDecoding", testJSONDecoding),
         ("testJSONEncoding", testJSONEncoding),
         ("testDecodingSpeed", testDecodingSpeed),
         ("testEncodingSpeed", testEncodingSpeed),
         ("testToJSON", testToJSON),
-        ("testFromJSON", testFromJSON)
+        ("testFromJSON", testFromJSON),
+        ("testEncodingNestedJSON", testEncodingNestedJSON),
+        ("testEncodeNestedJSONSpeed", testEncodeNestedJSONSpeed),
+        ("testDecodingNestedJSON", testDecodingNestedJSON),
+        ("testDecodeNestedJSONSpeed", testDecodeNestedJSONSpeed)
     ]
 }
 
