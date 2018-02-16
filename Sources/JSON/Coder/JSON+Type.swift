@@ -32,6 +32,14 @@ extension JSON {
                 throw error
             }
             return value as! T
+        case is Float.Type:
+            guard case let JSON.number(number) = self else {
+                throw error
+            }
+            guard case let Number.float(value) = number else {
+                throw error
+            }
+            return value as! T
         case is Double.Type:
             guard case let JSON.number(number) = self else {
                 throw error
