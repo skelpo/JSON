@@ -1,3 +1,4 @@
+// @dynamicMemberLookup
 public enum JSON: Codable {
     
     // MARK: - Cases
@@ -9,6 +10,13 @@ public enum JSON: Codable {
     indirect case object([String: JSON])
 
     // MARK: - Public Methods
+    public subscript(dynamicMember member: String) -> JSON {
+        switch self {
+        case let .object(structure): return structure[member] ?? .null
+        default: return .null
+        }
+    }
+    
     public mutating func insert(_ json: JSON, at index: Int)throws {
         switch self {
         case var .array(sequence):
