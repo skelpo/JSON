@@ -128,6 +128,28 @@ class JSONTests: XCTestCase {
         }
     }
     
+    func testDefaultJSONEncoding() {
+        let weather = try! JSONDecoder().decode(WeatherData.self, from: json.data(using: .utf8)!)
+        
+        measure {
+            do {
+                _ = try JSONEncoder().encode(weather)
+            } catch let error {
+                XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testDefaultJSONEDecoding() {
+        measure {
+            do {
+                _ = try JSONDecoder().decode(WeatherData.self, from: json.data(using: .utf8)!)
+            } catch let error {
+                XCTFail("\(error)")
+            }
+        }
+    }
+    
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
         ("testJSONDecoding", testJSONDecoding),
         ("testJSONEncoding", testJSONEncoding),
@@ -138,7 +160,9 @@ class JSONTests: XCTestCase {
         ("testEncodingNestedJSON", testEncodingNestedJSON),
         ("testEncodeNestedJSONSpeed", testEncodeNestedJSONSpeed),
         ("testDecodingNestedJSON", testDecodingNestedJSON),
-        ("testDecodeNestedJSONSpeed", testDecodeNestedJSONSpeed)
+        ("testDecodeNestedJSONSpeed", testDecodeNestedJSONSpeed),
+        ("testDefaultJSONEncoding", testDefaultJSONEncoding),
+        ("testDefaultJSONEDecoding", testDefaultJSONEDecoding)
     ]
 }
 
