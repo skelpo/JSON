@@ -2,17 +2,17 @@ import Foundation
 
 extension JSON {
     var isObject: Bool {
-        guard case JSON.object = self else {
-            return false
+        switch self {
+        case .object: return true
+        default: return false
         }
-        return true
     }
     
     var isArray: Bool {
-        guard case JSON.array = self else {
-            return false
+        switch self {
+        case .array: return true
+        default: return false
         }
-        return true
     }
     
     func value<T>(`for` type: T.Type, at path: [CodingKey])throws -> T where T: Decodable {
