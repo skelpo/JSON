@@ -1,5 +1,4 @@
 import Foundation
-import CodableKit
 
 internal final class _JSONDecoder: Decoder {
     var codingPath: [CodingKey]
