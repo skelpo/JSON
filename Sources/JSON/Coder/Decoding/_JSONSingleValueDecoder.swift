@@ -39,6 +39,5 @@ internal struct _JSONSingleValueDecoder: SingleValueDecodingContainer {
     func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         let decoder = _JSONDecoder(codingPath: self.codingPath, json: self.json)
         return try T.init(from: decoder)
-        // return try self.json.value(for: type, at: self.codingPath)
     }
 }
