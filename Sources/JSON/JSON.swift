@@ -17,6 +17,25 @@ public enum JSON: Codable {
         }
     }
     
+    public subscript(_ key: String...) -> JSON? {
+        do {
+            return try self.element(at: key)
+        } catch {
+            return nil
+        }
+    }
+    
+    public subscript(_ index: Int) -> JSON? {
+        switch self {
+        case let .array(sequence):
+            guard index < self.count! && index >= 0 else {
+                return nil
+            }
+            return sequence[index]
+        default: return nil
+        }
+    }
+    
     public mutating func insert(_ json: JSON, at index: Int)throws {
         switch self {
         case var .array(sequence):
