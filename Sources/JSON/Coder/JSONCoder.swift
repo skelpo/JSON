@@ -12,6 +12,11 @@ extension Decodable {
     public init(json: JSON)throws {
         self = try JSONCoder.decode(Self.self, from: json)
     }
+    
+    public init?(json: JSON?)throws {
+        guard let json = json else { return nil }
+        self = try JSONCoder.decode(Self.self, from: json)
+    }
 }
 
 extension Encodable {
