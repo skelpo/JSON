@@ -4,7 +4,7 @@ extension JSON: JSONRepresentable {
     }
 }
 
-extension Optional where Wrapped: JSONRepresentable {
+extension Optional: JSONRepresentable where Wrapped: JSONRepresentable {
     public var json: JSON {
         switch self {
         case .none: return .null
