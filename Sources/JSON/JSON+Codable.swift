@@ -44,7 +44,7 @@ extension JSON {
             throw JSONError.invalidOperationForStructure(self)
         }
         guard let element = data[key] else {
-            throw JSONError.badPathAtKey([key], key)
+            return .null
         }
         return element
     }
@@ -57,7 +57,7 @@ extension JSON {
             switch element {
             case let .object(data):
                 guard let value = data[key] else {
-                    throw JSONError.badPathAtKey([key], key)
+                    return .null
                 }
                 return value
             case .array: return try element.getElementsFromArray(with: key)
