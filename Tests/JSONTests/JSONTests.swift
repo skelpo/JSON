@@ -161,6 +161,18 @@ class JSONTests: XCTestCase {
         }
     }
     
+    func testFailableJSONSpeed() {
+        measure {
+            do {
+                for _ in 0...10_000 {
+                    _ = try 42.failableJSON()
+                }
+            } catch let error {
+                print("\(error)")
+            }
+        }
+    }
+    
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
         ("testJSONDecoding", testJSONDecoding),
         ("testJSONEncoding", testJSONEncoding),
