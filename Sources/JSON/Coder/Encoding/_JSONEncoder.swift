@@ -57,10 +57,6 @@ internal final class JSONContainer {
         return try self.json.value(for: type, at: path)
     }
     
-    public func insert(_ json: JSON, at index: Int)throws {
-        try self.json.insert(json, at: index)
-    }
-    
     public func append(_ json: JSON)throws {
         try self.json.append(json)
     }
@@ -75,14 +71,6 @@ internal final class JSONContainer {
     
     public func set(_ key: String, to json: FailableJSONRepresentable)throws {
         try self.json.set(key, to: json)
-    }
-    
-    public func merge(_ json: JSON)throws -> JSON {
-        return try self.json.merge(json)
-    }
-    
-    public func element(at path: [String])throws -> JSON {
-        return try self.json.element(at: path)
     }
     
     public var count: Int? {
