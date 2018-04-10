@@ -57,23 +57,23 @@ internal final class JSONContainer {
         return try self.json.value(for: type, at: path)
     }
     
-    public func append(_ json: JSON)throws {
+    func append(_ json: JSON)throws {
         try self.json.append(json)
     }
     
-    public func append(_ json: FailableJSONRepresentable)throws {
+    func append(_ json: FailableJSONRepresentable)throws {
         try self.json.append(json)
     }
     
-    public func set(_ key: String, _ json: JSON)throws {
+    func set(_ key: String, _ json: JSON)throws {
         try self.json.set(key, json)
     }
     
-    public func set(_ key: String, to json: FailableJSONRepresentable)throws {
+    func set(_ key: String, to json: FailableJSONRepresentable)throws {
         try self.json.set(key, to: json)
     }
     
-    public var count: Int? {
+    var count: Int? {
         return self.json.count
     }
 }
