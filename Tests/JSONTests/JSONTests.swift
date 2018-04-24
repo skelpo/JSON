@@ -173,6 +173,21 @@ class JSONTests: XCTestCase {
         }
     }
     
+    func testJSONInitJSON()throws {
+        let json: JSON = [
+            "key": "value",
+            "k": 1,
+            "l": [true, true, false]
+        ]
+        
+        _ = try JSON(json: json)
+        _ = try self.intialize(JSON.self, with: json)
+    }
+    
+    func intialize<T>(_ type: T.Type, with json: JSON)throws -> T where T: Decodable {
+        return try T(json: json)
+    }
+    
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
         ("testJSONDecoding", testJSONDecoding),
         ("testJSONEncoding", testJSONEncoding),
@@ -186,7 +201,8 @@ class JSONTests: XCTestCase {
         ("testDecodeNestedJSONSpeed", testDecodeNestedJSONSpeed),
         ("testDefaultJSONEncoding", testDefaultJSONEncoding),
         ("testDefaultJSONEDecoding", testDefaultJSONEDecoding),
-        ("testSmallData", testSmallData)
+        ("testSmallData", testSmallData),
+        ("testJSONInitJSON", testJSONInitJSON)
     ]
 }
 

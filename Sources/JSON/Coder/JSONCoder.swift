@@ -4,6 +4,9 @@ public final class JSONCoder {
     }
     
     public static func decode<T>(_ type: T.Type, from json: JSON)throws -> T where T: Decodable {
+        if type is JSON.Type {
+            return json as! T
+        }
         return try _JSONDecoder.decode(type, from: json)
     }
 }
