@@ -10,7 +10,7 @@ internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
     }
     
     func _encode<T>(_ value: T) where T: SafeJSONRepresentable {
-        self.container = JSONContainer(json: value.json)
+        self.container.json = value.json
     }
     
     public func encodeNil() throws {
