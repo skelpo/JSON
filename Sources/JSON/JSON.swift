@@ -1,5 +1,5 @@
 // @dynamicMemberLookup
-public enum JSON: Codable {
+public enum JSON: Codable, Equatable {
     
     // MARK: - Cases
     case null

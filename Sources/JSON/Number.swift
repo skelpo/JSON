@@ -1,4 +1,4 @@
-public enum Number: Codable {
+public enum Number: Codable, Equatable {
     case int(Int)
     case float(Float)
     case double(Double)

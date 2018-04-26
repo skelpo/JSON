@@ -188,6 +188,40 @@ class JSONTests: XCTestCase {
         return try T(json: json)
     }
     
+    func testSingleValueEncodingFailure()throws {
+        struct SingleDouble: Codable {
+            let id: Int
+            let name: String
+            
+            init(id: Int, name: String) {
+                self.id = id
+                self.name = name
+            }
+            
+            init(from decoder: Decoder)throws {
+                let container = try decoder.singleValueContainer()
+                
+                self.id = try container.decode(Int.self)
+                self.name = "same ol'"
+            }
+            
+            func encode(to encoder: Encoder)throws {
+                var container = encoder.singleValueContainer()
+                try container.encode(id)
+            }
+        }
+        
+        let subject = SingleDouble(id: 42, name: "The Answer")
+        let json = try subject.json()
+        
+        XCTAssertEqual(json, JSON.number(.int(42)))
+        
+        let decoded = try SingleDouble(json: json)
+        
+        XCTAssertEqual(decoded.id, 42)
+        XCTAssertEqual(decoded.name, "same ol'")
+    }
+    
     static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
         ("testJSONDecoding", testJSONDecoding),
         ("testJSONEncoding", testJSONEncoding),
@@ -202,7 +236,8 @@ class JSONTests: XCTestCase {
         ("testDefaultJSONEncoding", testDefaultJSONEncoding),
         ("testDefaultJSONEDecoding", testDefaultJSONEDecoding),
         ("testSmallData", testSmallData),
-        ("testJSONInitJSON", testJSONInitJSON)
+        ("testJSONInitJSON", testJSONInitJSON),
+        ("testSingleValueEncodingFailure", testSingleValueEncodingFailure)
     ]
 }
 
