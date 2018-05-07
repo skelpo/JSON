@@ -7,7 +7,7 @@ let package = Package(
         .library(name: "JSONKit", targets: ["JSONKit", "JSON"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0-rc")
+        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0")
     ],
     targets: [
         .target(name: "JSON", dependencies: []),
