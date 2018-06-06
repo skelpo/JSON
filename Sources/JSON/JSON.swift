@@ -1,4 +1,6 @@
-// @dynamicMemberLookup
+#if swift(>=4.2)
+@dynamicMemberLookup
+#endif
 public enum JSON: Codable, Equatable {
     
     // MARK: - Cases
@@ -10,12 +12,14 @@ public enum JSON: Codable, Equatable {
     indirect case object([String: JSON])
 
     // MARK: - Public Methods
+    #if swift(>=4.2)
     public subscript(dynamicMember member: String) -> JSON {
         switch self {
         case let .object(structure): return structure[member] ?? .null
         default: return .null
         }
     }
+    #endif
     
     public subscript(_ key: String...) -> JSON? {
         do {
