@@ -1,14 +1,14 @@
 import Foundation
 
 extension JSON {
-    var isObject: Bool {
+    public var isObject: Bool {
         switch self {
         case .object: return true
         default: return false
         }
     }
     
-    var isArray: Bool {
+    public var isArray: Bool {
         switch self {
         case .array: return true
         default: return false
