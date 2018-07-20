@@ -5,7 +5,8 @@ extension JSON {
         } else if let container = try? decoder.unkeyedContainer() {
             self = try JSON(from: container)
         } else {
-            throw DecodingError.dataCorrupted(DecodingError.Context.init(codingPath: [], debugDescription: "No top-level object or array found"))
+            let container = try decoder.singleValueContainer()
+            self = try JSON(from: container)
         }
     }
 
@@ -18,7 +19,8 @@ extension JSON {
             let container = encoder.unkeyedContainer()
             try self.encode(array: sequence, with: container)
         default:
-            throw EncodingError.invalidValue(self, EncodingError.Context.init(codingPath: [], debugDescription: "Top-level value must be array or object"))
+            let container = encoder.singleValueContainer()
+            try self.encode(value: self, with: container)
         }
     }
     
@@ -116,6 +118,20 @@ extension JSON {
         self = .array(array)
     }
     
+    private init(from container: SingleValueDecodingContainer)throws {
+        if container.decodeNil() {
+            self = .null
+        } else if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else if let value = try? container.decode(Number.self) {
+            self = .number(value)
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Un-supported type found in JSON")
+        }
+    }
+    
     private func encode(object: [String: JSON], with c: KeyedEncodingContainer<JSON.CodingKeys>) throws {
         var container = c
         
@@ -153,6 +169,27 @@ extension JSON {
                 let con = container.nestedUnkeyedContainer()
                 try encode(array: value, with: con)
             }
+        }
+    }
+    
+    private func encode(value: JSON, with c: SingleValueEncodingContainer)throws {
+        var container = c
+        
+        switch value {
+        case .null: try container.encodeNil()
+        case let .string(value): try container.encode(value)
+        case let .bool(value): try container.encode(value)
+        case let .number(value): try container.encode(value)
+        case .object:
+            throw EncodingError.invalidValue(
+                [String: JSON].self,
+                .init(codingPath: container.codingPath, debugDescription: "Cannot encode object to single value encoder")
+            )
+        case .array:
+            throw EncodingError.invalidValue(
+                [JSON].self,
+                .init(codingPath: container.codingPath, debugDescription: "Cannot encode array to single value encoder")
+            )
         }
     }
 }
