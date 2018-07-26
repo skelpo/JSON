@@ -86,7 +86,7 @@ public enum JSON: Codable, Equatable, CustomStringConvertible {
     public func element(at path: [String])throws -> JSON {
         var current: JSON = self
         
-        try path.forEach { (key) in
+        try path.forEach { key in
             switch current {
             case .object: current = try current.getSingleLevelElement(with: key)
             case .array: current = try current.getElementsFromArray(with: key)
