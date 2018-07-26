@@ -1,7 +1,7 @@
 #if swift(>=4.2)
 @dynamicMemberLookup
 #endif
-public enum JSON: Codable, Equatable {
+public enum JSON: Codable, Equatable, CustomStringConvertible {
     
     // MARK: - Cases
     case null
@@ -102,6 +102,19 @@ public enum JSON: Codable, Equatable {
         case let .array(sequence): return sequence.count
         case let .object(structure): return structure.count
         default: return nil
+        }
+    }
+    
+    public var description: String {
+        switch self {
+        case .null: return "null"
+        case let .string(string): return "\"" + string + "\""
+        case let .number(number): return number.description
+        case let .bool(bool): return bool.description
+        case let .array(array): return "[" + array.map { $0.description }.joined(separator: ",") + "]"
+        case let .object(object):
+            let data = object.map { "\"" + $0.key + "\":" + $0.value.description }.joined(separator: ",")
+            return "{" + data + "}"
         }
     }
 }

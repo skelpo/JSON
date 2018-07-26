@@ -1,4 +1,4 @@
-public enum Number: Codable, Equatable {
+public enum Number: Codable, Equatable, CustomStringConvertible {
     case int(Int)
     case float(Float)
     case double(Double)
@@ -22,6 +22,14 @@ public enum Number: Codable, Equatable {
         case let .int(int): try container.encode(int)
         case let .float(float): try container.encode(float)
         case let .double(double): try container.encode(double)
+        }
+    }
+    
+    public var description: String {
+        switch self {
+        case let .int(int): return String(describing: int)
+        case let .float(float): return String(describing: float)
+        case let .double(double): return String(describing: double)
         }
     }
 }
