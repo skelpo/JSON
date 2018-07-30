@@ -12,3 +12,17 @@ extension JSON {
         return try HTTPResponse(status: status, headers: header, body: self.body())
     }
 }
+
+extension Response {
+    public convenience init(using container: Container, body: JSON)throws {
+        self.init(using: container)
+        try self.content.encode(body)
+    }
+}
+
+extension Request {
+    public convenience init(using container: Container, body: JSON)throws {
+        self.init(using: container)
+        try self.content.encode(body)
+    }
+}
