@@ -43,29 +43,12 @@ internal struct _JSONKeyedValueDecoder<K: CodingKey>: KeyedDecodingContainerProt
         return try json.value(for: type, at: self.codingPath)
     }
     
-    func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
-        return try _decode(type, forKey: key)
-    }
-    
-    func decode(_ type: Int.Type, forKey key: K) throws -> Int {
-        return try _decode(type, forKey: key)
-    }
-    
-    func decode(_ type: Float.Type, forKey key: K) throws -> Float {
-        return try _decode(type, forKey: key)
-    }
-    
-    func decode(_ type: Double.Type, forKey key: K) throws -> Double {
-        return try _decode(type, forKey: key)
-    }
-    
-    func decode(_ type: String.Type, forKey key: K) throws -> String {
-        return try _decode(type, forKey: key)
-    }
-    
-    func decode<T>(_ type: T.Type, forKey key: K) throws -> T where T : Decodable {
-        return try _decode(type, forKey: key)
-    }
+    func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool { return try _decode(type, forKey: key) }
+    func decode(_ type: Int.Type, forKey key: K)    throws -> Int { return try _decode(type, forKey: key) }
+    func decode(_ type: Float.Type, forKey key: K)  throws -> Float { return try _decode(type, forKey: key) }
+    func decode(_ type: Double.Type, forKey key: K) throws -> Double { return try _decode(type, forKey: key) }
+    func decode(_ type: String.Type, forKey key: K) throws -> String { return try _decode(type, forKey: key) }
+    func decode<T>(_ type: T.Type, forKey key: K)   throws -> T where T : Decodable { return try _decode(type, forKey: key) }
     
     private func _superDecoder(forKey key: CodingKey) throws -> Decoder {
         let value = self.json[key.stringValue] ?? JSON.null

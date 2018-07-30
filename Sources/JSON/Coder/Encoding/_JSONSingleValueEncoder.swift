@@ -13,29 +13,12 @@ internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
         self.container.json = value.json
     }
     
-    public func encodeNil() throws {
-        _encode(JSON.null)
-    }
-    
-    public func encode(_ value: Bool) throws {
-        _encode(value)
-    }
-    
-    public func encode(_ value: Int) throws {
-        _encode(value)
-    }
-    
-    public func encode(_ value: String) throws {
-        _encode(value)
-    }
-    
-    public func encode(_ value: Float) throws {
-        _encode(value)
-    }
-    
-    public func encode(_ value: Double) throws {
-        _encode(value)
-    }
+    public func encodeNil()             throws { _encode(JSON.null) }
+    public func encode(_ value: Bool)   throws { _encode(value) }
+    public func encode(_ value: Int)    throws { _encode(value) }
+    public func encode(_ value: String) throws { _encode(value) }
+    public func encode(_ value: Float)  throws { _encode(value) }
+    public func encode(_ value: Double) throws { _encode(value) }
     
     public func encode<T : Encodable>(_ value: T) throws {
         let encoder = _JSONEncoder(codingPath: self.codingPath)

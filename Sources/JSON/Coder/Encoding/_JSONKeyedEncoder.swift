@@ -13,29 +13,12 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
         self.json = json
     }
     
-    func encodeNil(forKey key: Key) throws {
-        try self.json.set(key.stringValue, .null)
-    }
-    
-    func encode(_ value: Bool, forKey key: Key) throws {
-        try self.json.set(key.stringValue, to: value)
-    }
-    
-    func encode(_ value: Int, forKey key: Key) throws {
-        try self.json.set(key.stringValue, to: value)
-    }
-    
-    func encode(_ value: String, forKey key: Key) throws {
-        try self.json.set(key.stringValue, to: value)
-    }
-    
-    func encode(_ value: Float, forKey key: Key) throws {
-        try self.json.set(key.stringValue, to: value)
-    }
-    
-    func encode(_ value: Double, forKey key: Key) throws {
-        try self.json.set(key.stringValue, to: value)
-    }
+    func encodeNil(forKey key: Key)               throws { try self.json.set(key.stringValue, .null) }
+    func encode(_ value: Bool, forKey key: Key)   throws { try self.json.set(key.stringValue, to: value) }
+    func encode(_ value: Int, forKey key: Key)    throws { try self.json.set(key.stringValue, to: value) }
+    func encode(_ value: String, forKey key: Key) throws { try self.json.set(key.stringValue, to: value) }
+    func encode(_ value: Float, forKey key: Key)  throws { try self.json.set(key.stringValue, to: value) }
+    func encode(_ value: Double, forKey key: Key) throws { try self.json.set(key.stringValue, to: value) }
     
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {        
         let encoder = _JSONEncoder(codingPath: self.codingPath + [key])
