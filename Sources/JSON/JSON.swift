@@ -99,6 +99,7 @@ public enum JSON: Codable, Equatable, CustomStringConvertible {
     
     public var count: Int? {
         switch self {
+        case let .string(string): return string.count
         case let .array(sequence): return sequence.count
         case let .object(structure): return structure.count
         default: return nil
