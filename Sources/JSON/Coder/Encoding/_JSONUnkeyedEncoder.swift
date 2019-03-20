@@ -12,10 +12,10 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     }
     
     var count: Int {
-        return json.count!
+        return json.json.array?.count ?? 0
     }
     
-    public func encodeNil()             throws { try self.json.append(.null) }
+    public func encodeNil()             throws { self.json.append(.null) }
     public func encode(_ value: Bool)   throws { try self.json.append(value) }
     public func encode(_ value: Int)    throws { try self.json.append(value) }
     public func encode(_ value: String) throws { try self.json.append(value) }
@@ -25,7 +25,7 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     public func encode<T : Encodable>(_ value: T) throws {
         let encoder = _JSONEncoder(codingPath: self.codingPath + [JSON.CodingKeys(intValue: self.count)])
         try value.encode(to: encoder)
-        try self.json.append(encoder.container.json)
+        self.json.append(encoder.container.json)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {

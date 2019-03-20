@@ -1,4 +1,6 @@
-extension JSON {
+extension JSON: Codable {
+    
+    /// See `Decodable.init(from:)`.
     public init(from decoder: Decoder) throws {
         if var container = try? decoder.container(keyedBy: JSON.CodingKeys.self) {
             self = try JSON(from: &container)
@@ -10,6 +12,7 @@ extension JSON {
         }
     }
 
+    /// See `Encodable.encode(to:)`.
     public func encode(to encoder: Encoder) throws {
         switch self {
         case let .object(structure):
@@ -24,50 +27,33 @@ extension JSON {
         }
     }
     
+    /// A generic `CodingKey` type that supports any value.
     public struct CodingKeys: CodingKey {
+        
+        /// See `CodingKey.stringValue`.
         public var stringValue: String
+        
+        /// See `CodingKey.intValue`.
         public var intValue: Int?
         
+        /// See `CodingKey.init(stringValue:)`.
+        ///
+        /// If the string passed in is convertible to an `Int`, the `intValue` property is set.
         public init(stringValue: String) {
             self.stringValue = stringValue
+            self.intValue = Int(stringValue)
         }
         
+        /// See `CodingKey.init(intValue:)`.
+        ///
+        /// The `.stringValue` property is set to the string representation of the `Int`.
         public init(intValue: Int) {
-            self.init(stringValue: "\(intValue)")
+            self.stringValue = String(describing: intValue)
             self.intValue = intValue
         }
     }
     
-    // MARK: - Private Helper Methods
-    
-    
-    internal func getSingleLevelElement(with key: String)throws -> JSON {
-        guard case let JSON.object(data) = self else {
-            throw JSONError.invalidOperationForStructure(self)
-        }
-        guard let element = data[key] else {
-            return .null
-        }
-        return element
-    }
-    
-    internal func getElementsFromArray(with key: String)throws -> JSON {
-        guard case let JSON.array(sequence) = self else {
-            throw JSONError.invalidOperationForStructure(self)
-        }
-        let elements = try sequence.map { (element) -> JSON in
-            switch element {
-            case let .object(data):
-                guard let value = data[key] else {
-                    return .null
-                }
-                return value
-            case .array: return try element.getElementsFromArray(with: key)
-            default: throw JSONError.badPathAtKey([key], key)
-            }
-        }
-        return .array(elements)
-    }
+    // MARK: - Private Decoder Inits
     
     private init(from container: inout KeyedDecodingContainer<JSON.CodingKeys>)throws {
         let object: [String: JSON] = try container.allKeys.reduce(into: [:]) { object, key in
@@ -129,6 +115,8 @@ extension JSON {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Un-supported type found in JSON")
         }
     }
+    
+    // MARK: - Private Encoder Methods
     
     private func encode(object: [String: JSON], with container: inout KeyedEncodingContainer<JSON.CodingKeys>) throws {
         try object.forEach { key, value in
