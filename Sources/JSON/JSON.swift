@@ -276,6 +276,21 @@ public enum JSON: Equatable, CustomStringConvertible {
         }
     }
     
+    /// Accesses the `JSON` value at a given key/index path.
+    ///
+    /// To get the value, `.get(_:)` is used. To set the value, `.set(_:to:)` is used.
+    ///
+    /// - Parameter path: The key/index path to access.
+    /// - Returns: Thw JSON value(s) found at the path passed in.
+    public subscript (path: String...) -> JSON {
+        get {
+            return self.get(path)
+        }
+        set {
+            self.set(path, to: newValue)
+        }
+    }
+    
     /// Gets the JSON at a given path.
     ///
     /// Depending on the JSON case for the path element, different logic paths will be taken:
