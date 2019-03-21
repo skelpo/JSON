@@ -379,9 +379,24 @@ public enum JSON: Equatable, CustomStringConvertible {
     ///   - json: The JSON value to set the index or key to.
     public mutating func set<Path>(_ path: Path, to json: JSON) where Path: Collection, Path.Element == String {
         if let key = path.first {
-            var current = self.get([key])
-            current.set(path.dropFirst(), to: json)
-            self = current
+            switch self {
+            case var .object(object):
+                if object[key] == nil { object[key] = .null }
+                object[key]?.set(path.dropFirst(), to: json)
+                self = .object(object)
+            case var .array(array) where Int(key) != nil:
+                guard let index = Int(key) else { return }
+                array[index].set(path.dropFirst(), to: json)
+                self = .array(array)
+            default:
+                var value = JSON.null
+                value.set(path.dropFirst(), to: json)
+                if let index = Int(key) {
+                    self = .array(Array(repeating: .null, count: index) + [value])
+                } else {
+                    self = .object([key: value])
+                }
+            }
         } else {
             self = json
         }
