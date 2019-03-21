@@ -43,6 +43,19 @@ class JSONTests: XCTestCase {
         XCTAssertNil(JSON.null.string)
     }
     
+    func testInitializers() {
+        XCTAssertEqual(JSON(), .null)
+        XCTAssertEqual(JSON("foo"), .string("foo"))
+        XCTAssertEqual(JSON(42), .number(.int(42)))
+        XCTAssertEqual(JSON(Float(3.14)), .number(.float(3.14)))
+        XCTAssertEqual(JSON(Double(1553177913.5623169)), .number(.double(1553177913.5623169)))
+        XCTAssertEqual(JSON([.string("foo"), .bool(true), .null]), .array([.string("foo"), .bool(true), .null]))
+        XCTAssertEqual(
+            JSON(["foo": .string("bar"), "fizz": .bool(true), "buzz": .null]),
+            .object(["foo": .string("bar"), "fizz": .bool(true), "buzz": .null])
+        )
+    }
+    
     func testDynamicAccessGet()throws {
         var weather = try JSON(data: Data(json.utf8))
         XCTAssertEqual(weather.minutely.data.0.time.int, 1517594040)

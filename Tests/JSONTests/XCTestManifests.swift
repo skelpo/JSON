@@ -33,6 +33,7 @@ extension JSONTests {
         ("testAssociatedValueProperties", testAssociatedValueProperties),
         ("testDynamicAccessGet", testDynamicAccessGet),
         ("testDynamicAccessSetSpeed", testDynamicAccessSetSpeed),
+        ("testInitializers", testInitializers),
     ]
 }
 
