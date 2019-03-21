@@ -133,7 +133,7 @@ class JSONTests: XCTestCase {
                 "time": .number(.int(1517594040)),
                 "precipIntensity": .number(.int(0)),
                 "precipProbability": .number(.int(0))
-                ])
+            ])
         )
         
         measure {
@@ -164,5 +164,17 @@ class JSONTests: XCTestCase {
                 data.set(["minutely", "data", "0", "time"], to: .number(.int(1517594031)))
             }
         }
+    }
+    
+    func testDescription() {
+        XCTAssertEqual(JSON.null.description, "null")
+        XCTAssertEqual(JSON.bool(true).description, "true")
+        XCTAssertEqual(JSON.bool(false).description, "false")
+        XCTAssertEqual(JSON.string("foo").description, #""foo""#)
+        XCTAssertEqual(JSON.number(.int(42)).description, "42")
+        XCTAssertEqual(JSON.number(.float(3.14)).description, "3.14")
+        XCTAssertEqual(JSON.number(.double(1553177913.562317)).description, "1553177913.562317")
+        XCTAssertEqual(JSON.array([.string("foo"), .string("bar")]).description, #"["foo","bar"]"#)
+        XCTAssertEqual(JSON.object(["foo-bar": .string("fizz-buzz")]).description, #"{"foo-bar":"fizz-buzz"}"#)
     }
 }

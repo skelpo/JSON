@@ -31,6 +31,7 @@ extension JSONTests {
     // to regenerate.
     static let __allTests__JSONTests = [
         ("testAssociatedValueProperties", testAssociatedValueProperties),
+        ("testDescription", testDescription),
         ("testDynamicAccessGet", testDynamicAccessGet),
         ("testDynamicAccessSetSpeed", testDynamicAccessSetSpeed),
         ("testGet", testGet),
