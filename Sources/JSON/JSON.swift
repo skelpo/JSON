@@ -408,7 +408,7 @@ public enum JSON: Equatable, CustomStringConvertible {
     public var description: String {
         switch self {
         case .null: return "null"
-        case let .string(string): return "\"" + string + "\""
+        case let .string(string): return #""\#(string)""#
         case let .number(number): return number.description
         case let .bool(bool): return bool.description
         case let .array(array): return "[" + array.map { $0.description }.joined(separator: ",") + "]"
