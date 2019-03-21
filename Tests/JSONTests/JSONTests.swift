@@ -142,4 +142,27 @@ class JSONTests: XCTestCase {
             }
         }
     }
+    
+    func testSet()throws {
+        var data = try JSON(data: Data(json.utf8))
+        var copy = data
+        
+        copy.set(["minutely", "data", "0", "time"], to: .number(.int(1517594031)))
+        XCTAssertEqual(copy["minutely", "data", "0", "time"], .number(.int(1517594031)))
+        
+        copy.set(["minutely", "data", "0"], to: .array([.string("foo"), .string("bar"), .string("fizz"), .string("buzz")]))
+        XCTAssertEqual(
+            copy["minutely", "data", "0"],
+            .array([.string("foo"), .string("bar"), .string("fizz"), .string("buzz")])
+        )
+        
+        copy.set([], to: .null)
+        XCTAssertEqual(copy, .null)
+        
+        measure {
+            for _ in 0..<10_000 {
+                data.set(["minutely", "data", "0", "time"], to: .number(.int(1517594031)))
+            }
+        }
+    }
 }
