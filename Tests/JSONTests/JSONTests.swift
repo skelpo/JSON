@@ -184,10 +184,6 @@ class JSONTests: XCTestCase {
         _ = try self.intialize(JSON.self, with: json)
     }
     
-    func intialize<T>(_ type: T.Type, with json: JSON)throws -> T where T: Decodable {
-        return try T(json: json)
-    }
-    
     func testSingleValueEncodingFailure()throws {
         struct SingleDouble: Codable {
             let id: Int
@@ -222,23 +218,38 @@ class JSONTests: XCTestCase {
         XCTAssertEqual(decoded.name, "same ol'")
     }
     
-    static var allTests: [(String, (JSONTests) -> ()throws -> ())] = [
-        ("testJSONDecoding", testJSONDecoding),
-        ("testJSONEncoding", testJSONEncoding),
-        ("testDecodingSpeed", testDecodingSpeed),
-        ("testEncodingSpeed", testEncodingSpeed),
-        ("testToJSON", testToJSON),
-        ("testFromJSON", testFromJSON),
-        ("testEncodingNestedJSON", testEncodingNestedJSON),
-        ("testEncodeNestedJSONSpeed", testEncodeNestedJSONSpeed),
-        ("testDecodingNestedJSON", testDecodingNestedJSON),
-        ("testDecodeNestedJSONSpeed", testDecodeNestedJSONSpeed),
-        ("testDefaultJSONEncoding", testDefaultJSONEncoding),
-        ("testDefaultJSONEDecoding", testDefaultJSONEDecoding),
-        ("testSmallData", testSmallData),
-        ("testJSONInitJSON", testJSONInitJSON),
-        ("testSingleValueEncodingFailure", testSingleValueEncodingFailure)
-    ]
+    func testDynamicAccessGet()throws {
+        var weather = try JSON(data: Data(json.utf8))
+        XCTAssertEqual(weather.minutely.data.0.time.int, 1517594040)
+        
+        measure {
+            for _ in 0..<10_000 {
+                _ = weather.minutely.data.0.time
+            }
+        }
+    }
+    
+    func testDynamicAccessSetSpeed()throws {
+        var weather = try JSON(data: Data(json.utf8))
+        
+        weather.minutely.data.0.time.int = 1517594031
+        XCTAssertEqual(weather.minutely.data.0.time.int, 1517594031)
+        
+        weather.minutely.data.10.time = 42
+        XCTAssertEqual(weather.minutely.data.10.time, 42)
+        
+        measure {
+            for _ in 0..<10_000 {
+                weather.minutely.data.time = 39916800
+            }
+        }
+    }
+    
+    // MARK: - Helpers
+    
+    func intialize<T>(_ type: T.Type, with json: JSON)throws -> T where T: Decodable {
+        return try T(json: json)
+    }
 }
 
 fileprivate struct User: Codable {

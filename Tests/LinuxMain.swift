@@ -1,6 +1,8 @@
 import XCTest
-@testable import JSONTests
 
-XCTMain([
-    testCase(JSONTests.allTests),
-])
+import JSONTests
+
+var tests = [XCTestCaseEntry]()
+tests += JSONTests.__allTests()
+
+XCTMain(tests)
