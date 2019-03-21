@@ -1,0 +1,21 @@
+version: "Apple Swift version 5.0 (swiftlang-1001.0.63.8 clang-1001.0.43)"
+options: "2c6781d88cb032b28e7ea4d162700661"
+build_time: [1553187341, 711037000]
+inputs:
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Decoding/_JSONDecoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Decoding/_JSONKeyedValueDecoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Decoding/_JSONSingleValueDecoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Decoding/_JSONUnkeyedDecoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Encoding/_JSONEncoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Encoding/_JSONKeyedEncoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Encoding/_JSONSingleValueEncoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/Encoding/_JSONUnkeyedEncoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/JSON+Type.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Coder/JSONCoder.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/JSON+Codable.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/JSON+ExpressibleByLiteral.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/JSON+JSONConvertible.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/JSON.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/JSONConvertible.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Number.swift": [9223372036, 854775807]
+  "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/Operator.swift": [9223372036, 854775807]
