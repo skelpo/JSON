@@ -121,4 +121,25 @@ class JSONTests: XCTestCase {
             "array": ["foo", "bar", "fizz", "buzz"]
         ])
     }
+    
+    func testGet()throws {
+        let data = try JSON(data: Data(json.utf8))
+        
+        XCTAssertEqual(data.get([]), data)
+        XCTAssertEqual(data.get(["minutely", "data", "0", "time"]), 1517594040)
+        XCTAssertEqual(
+            data.get(["minutely", "data", "0"]),
+            .object([
+                "time": .number(.int(1517594040)),
+                "precipIntensity": .number(.int(0)),
+                "precipProbability": .number(.int(0))
+                ])
+        )
+        
+        measure {
+            for _ in 0..<10_000 {
+                _ = data.get(["minutely", "data", "0", "time"])
+            }
+        }
+    }
 }
