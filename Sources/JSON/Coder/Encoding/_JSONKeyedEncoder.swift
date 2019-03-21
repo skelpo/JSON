@@ -13,7 +13,7 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
         self.json = json
     }
     
-    func encodeNil(forKey key: Key)               throws { try self.json.set(key.stringValue, .null) }
+    func encodeNil(forKey key: Key)               throws { self.json.set(key.stringValue, .null) }
     func encode(_ value: Bool, forKey key: Key)   throws { try self.json.set(key.stringValue, to: value) }
     func encode(_ value: Int, forKey key: Key)    throws { try self.json.set(key.stringValue, to: value) }
     func encode(_ value: String, forKey key: Key) throws { try self.json.set(key.stringValue, to: value) }
@@ -23,7 +23,7 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {        
         let encoder = _JSONEncoder(codingPath: self.codingPath + [key])
         try value.encode(to: encoder)
-        try self.json.set(key.stringValue, encoder.container.json)
+        self.json.set(key.stringValue, encoder.container.json)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: K) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
