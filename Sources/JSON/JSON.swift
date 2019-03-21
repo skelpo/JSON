@@ -309,7 +309,7 @@ public enum JSON: Equatable, CustomStringConvertible {
         get {
             switch self {
             case let .object(structure): return structure[member] ?? .null
-            case let .array(sequence) where Int(member) != nil:
+            case let .array(sequence):
                 if let index = Int(member) {
                     guard index >= 0 && index < sequence.endIndex else { return .null }
                     return sequence[index]
