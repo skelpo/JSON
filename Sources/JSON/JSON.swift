@@ -52,7 +52,7 @@
 ///
 /// This also works for setting JSON values:
 ///
-///     json.users.address.city = "Cupertion"
+///     json.users.0.name.first = "Tanner"
 @dynamicMemberLookup
 public enum JSON: Equatable, CustomStringConvertible {
     
@@ -308,27 +308,22 @@ public enum JSON: Equatable, CustomStringConvertible {
     public subscript(dynamicMember member: String) -> JSON {
         get {
             switch self {
-            case let .object(structure): return structure[member] ?? .null
-            case let .array(sequence):
-                if let index = Int(member) {
-                    guard index >= 0 && index < sequence.endIndex else { return .null }
-                    return sequence[index]
-                } else {
-                    let elements = sequence.map { element in element[dynamicMember: member] }
-                    return .array(elements)
-                }
+            case let .object(object): return object[member] ?? .null
+            case let .array(array) where Int(member) != nil:
+                guard let index = Int(member), index >= array.startIndex && index < array.endIndex else { return .null }
+                return array[index]
             default: return .null
             }
         }
         set {
             switch self {
-            case var .object(structure):
-                structure[member] = newValue
-                self = .object(structure)
-            case var .array(sequence) where Int(member) != nil:
+            case var .object(object):
+                object[member] = newValue
+                self = .object(object)
+            case var .array(array) where Int(member) != nil:
                 guard let index = Int(member) else { return }
-                sequence[index] = newValue
-                self = .array(sequence)
+                array[index] = newValue
+                self = .array(array)
             default: self = newValue
             }
         }
@@ -336,8 +331,7 @@ public enum JSON: Equatable, CustomStringConvertible {
     
     /// Accesses the `JSON` value at a given key/index path.
     ///
-    /// - Complexity: _O(n * m)_ where _n_ is the number of elements in the path and _m_ is
-    ///   the amount of elements in the array you are accessing element properties from.
+    /// - Complexity: _O(n)_ where _n_ is the number of elements in the path.
     ///
     /// To get the value, `.get(_:)` is used. To set the value, `.set(_:to:)` is used.
     ///
@@ -354,15 +348,11 @@ public enum JSON: Equatable, CustomStringConvertible {
     
     /// Gets the JSON at a given path.
     ///
-    /// - Complexity: _O(n * m)_ where _n_ is the number of elements in the path and _m_ is
-    ///   the amount of elements in the array you are accessing element properties from.
+    /// - Complexity: _O(n)_ where _n_ is the number of elements in the path.
     ///
-    /// Depending on the JSON case for the path element, different logic paths will be taken:
-    /// - `.object`: Get the JSON value where the key is equal to the path element.
-    /// - `.array`:
-    ///   - `Int`: Get the array element at the given index.
-    ///   - `String`: Get the value for the key from each array element, and return them as an array.
-    /// - default: Return `.null`.
+    /// If an `.array` case is found, the path key will be converted to an index and
+    /// the array element at that index will be returned. If key to index conversion fails,
+    /// or the index it outside the range of the array, `.null` is returned.
     ///
     /// - Parameter path: The keys and indexes to the desired JSON value(s).
     /// - Returns: Thw JSON value(s) found at the path passed in. You will get a `.null` case
@@ -371,15 +361,9 @@ public enum JSON: Equatable, CustomStringConvertible {
         return path.reduce(self) { json, key in
             switch json {
             case let .object(object): return object[key] ?? .null
-            case let .array(array):
-                if let index = Int(key) {
-                    return array[index]
-                } else {
-                    let new = array.map { element in
-                        return element.get([key])
-                    }
-                    return .array(new)
-                }
+            case let .array(array) where Int(key) != nil:
+                guard let index = Int(key), index >= array.startIndex && index < array.endIndex else { return .null }
+                return array[index]
             default: return .null
             }
         }
