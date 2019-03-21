@@ -153,8 +153,8 @@ class JSONTests: XCTestCase {
     func testSmallData() {
         do {
             let json = try JSON(data: smallData.data(using: .utf8)!)
-            let number = json["number"]!
-            let int = try Int(json: number)
+            let number = json["number"]
+            let int = Int(json: number)
             XCTAssert(int == 23)
         } catch let error {
             XCTFail("\(error)")
@@ -180,7 +180,7 @@ class JSONTests: XCTestCase {
             "l": [true, true, false]
         ]
         
-        _ = try JSON(json: json)
+        _ = JSON(json: json)
         _ = try self.intialize(JSON.self, with: json)
     }
     
