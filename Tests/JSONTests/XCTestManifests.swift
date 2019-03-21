@@ -30,6 +30,7 @@ extension JSONTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__JSONTests = [
+        ("testAssociatedValueProperties", testAssociatedValueProperties),
         ("testDynamicAccessGet", testDynamicAccessGet),
         ("testDynamicAccessSetSpeed", testDynamicAccessSetSpeed),
     ]
