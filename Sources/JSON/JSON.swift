@@ -1,3 +1,58 @@
+/// A representation of ambigious JSON.
+///
+/// # Heterogeneous Arrays.
+///
+/// Take for exmaple the JSON below:
+///
+///     {
+///         "users": [
+///             {
+///                 "age": 18,
+///                 "name": {
+///                     "first": "Caleb",
+///                     "last": "Kleveter"
+///                 }
+///             }
+///         ],
+///         "metadata": [42, 3.14, true, "fizz buzz"]
+///     }
+///
+/// The `users` data is pretty normal, but the `metadata` array can't be represented by standard arrays.
+///
+/// The `metadata` array, when decoded to a `JSON` instance, will result in this case:
+///
+///     JSON.array([.number(.int(42)), .number(.double(3.14)), .bool(true), .string("fizz buzz")])
+///
+/// # Value Unwrapping
+///
+/// Getting the associated value from an enum case can be a real pain,
+/// so there are properties for each case to unwrap the value.
+///
+/// If you have the example JSON above, it is an `.object` case.
+/// You can use the `.object` property to get the `[String: JSON]` value it wraps:
+///
+///     json.object // [String: JSON]?
+///
+/// There are also properties for `.null`, `.string`, `.bool`, `.int`, `.float`, `.double`, and `.array`.
+/// Be sure to read the docs for the `.null` property.
+///
+/// These properties also have setters. They let you set the value of the current `JSON` case.
+/// They will set the case regardless the current type, so if the case is a `.bool`,
+/// you can use `.string` and the case will be changed to a `.string` case.
+///
+///     var json = JSON.bool(true)
+///     json.string = "Fizz Buzz"
+///     print(json) // "\"Fizz Buzz\""
+///
+/// # Dynamic Access
+///
+/// `JSON` supports `@dynamicMemberLookup`, so it is really easy to access values your JSON objects/arrays:
+///
+///     let firstname = json.users.0.name.first.string
+///
+/// This also works for setting JSON values:
+///
+///     json.users.address.city = "Cupertion"
 @dynamicMemberLookup
 public enum JSON: Equatable, CustomStringConvertible {
     
@@ -235,6 +290,9 @@ public enum JSON: Equatable, CustomStringConvertible {
     
     /// Gets the JSON value for a given key.
     ///
+    /// - Complexity: _O(n)_, where _n_ is the number of elements in the JSON array you are accessing object values from.
+    ///   More often though, you are accessing object values via key, and that is _O(1)_.
+    ///
     /// Most of the time, the member passed in with be a `String` key. This will get a value for an object key:
     ///
     ///     json.user.first_name // .string("Tanner")
@@ -278,6 +336,9 @@ public enum JSON: Equatable, CustomStringConvertible {
     
     /// Accesses the `JSON` value at a given key/index path.
     ///
+    /// - Complexity: _O(n * m)_ where _n_ is the number of elements in the path and _m_ is
+    ///   the amount of elements in the array you are accessing element properties from.
+    ///
     /// To get the value, `.get(_:)` is used. To set the value, `.set(_:to:)` is used.
     ///
     /// - Parameter path: The key/index path to access.
@@ -292,6 +353,9 @@ public enum JSON: Equatable, CustomStringConvertible {
     }
     
     /// Gets the JSON at a given path.
+    ///
+    /// - Complexity: _O(n * m)_ where _n_ is the number of elements in the path and _m_ is
+    ///   the amount of elements in the array you are accessing element properties from.
     ///
     /// Depending on the JSON case for the path element, different logic paths will be taken:
     /// - `.object`: Get the JSON value where the key is equal to the path element.
@@ -323,7 +387,8 @@ public enum JSON: Equatable, CustomStringConvertible {
     
     /// Sets the value of an object key or array index.
     ///
-    ///
+    /// - Complexity: _O(n)_, where _n_ is the number of elements in the `path`. This method is
+    ///   recursive, so you may have adverse performance for long paths.
     ///
     /// - Parameters:
     ///   - path: The path of the value to set.
