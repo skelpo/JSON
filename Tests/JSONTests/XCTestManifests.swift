@@ -34,6 +34,7 @@ extension JSONTests {
         ("testDynamicAccessGet", testDynamicAccessGet),
         ("testDynamicAccessSetSpeed", testDynamicAccessSetSpeed),
         ("testInitializers", testInitializers),
+        ("testSubscript", testSubscript),
     ]
 }
 

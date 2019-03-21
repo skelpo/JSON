@@ -82,4 +82,43 @@ class JSONTests: XCTestCase {
             }
         }
     }
+    
+    func testSubscript()throws {
+        var data = try JSON(data: Data(json.utf8))
+        
+        XCTAssertEqual(data[], data)
+        XCTAssertEqual(data["minutely", "data", "0", "time"], 1517594040)
+        XCTAssertEqual(
+            data["minutely", "data", "0"],
+            .object([
+                "time": .number(.int(1517594040)),
+                "precipIntensity": .number(.int(0)),
+                "precipProbability": .number(.int(0))
+            ])
+        )
+        
+        data["minutely", "data", "0", "time"] = .number(.int(1517594031))
+        XCTAssertEqual(data["minutely", "data", "0", "time"], .number(.int(1517594031)))
+        
+        data["minutely", "data", "0"] = .array([.string("foo"), .string("bar"), .string("fizz"), .string("buzz")])
+        XCTAssertEqual(
+            data["minutely", "data", "0"],
+            .array([.string("foo"), .string("bar"), .string("fizz"), .string("buzz")])
+        )
+        
+        data[] = .null
+        XCTAssertEqual(data, .null)
+        
+        data[] = JSON(["string": .string("str"), "int": .number(.int(42)), "bool": .bool(true)])
+        data["array"] = JSON([.string("foo"), .string("bar"), .string("fizz"), .string("buzz")])
+        data["string", "count"] = JSON(3)
+        XCTAssertEqual(data, [
+            "string": [
+                "count": 3
+            ],
+            "int": 42,
+            "bool": true,
+            "array": ["foo", "bar", "fizz", "buzz"]
+        ])
+    }
 }
