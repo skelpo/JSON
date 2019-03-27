@@ -1,6 +1,8 @@
 import Foundation
 
 extension JSON {
+    
+    /// Indicates whether the `JSON` case of the currenct instance is `.object` or not.
     public var isObject: Bool {
         switch self {
         case .object: return true
@@ -8,6 +10,7 @@ extension JSON {
         }
     }
     
+    /// Indicates whether the `JSON` case of the currenct instance is `.array` or not.
     public var isArray: Bool {
         switch self {
         case .array: return true

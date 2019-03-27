@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Enumerations  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="Enumerations  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html"> Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html"> Reference</a>
+        <img id="carat" src="img/carat.png" />
+        Enumerations  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/JSONCoder.html">JSONCoder</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/JSON.html">JSON</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/JSON/CodingKeys.html">– CodingKeys</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/Number.html">Number</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Bool.html">Bool</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Decodable.html">Decodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Dictionary.html">Dictionary</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Double.html">Double</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Encodable.html">Encodable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Float.html">Float</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Int.html">Int</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Optional.html">Optional</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:4JSON2leoiyyxz_A2AOSgtKSeRzlF">&lt;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Functions.html#/s:4JSON2leoiyyxz_xSgtlF">&lt;=(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/FailableJSONRepresentable.html">FailableJSONRepresentable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/LosslessJSONConvertible.html">LosslessJSONConvertible</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/SafeJSONRepresentable.html">SafeJSONRepresentable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4JSON17JSONRepresentablea">JSONRepresentable</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Enumerations</h1>
+            <p>The following enumerations are available globally.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4JSONAAO"></a>
+                    <a name="//apple_ref/swift/Enum/JSON" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4JSONAAO">JSON</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A representation of ambigious JSON.</p>
+<h1 id='heterogeneous-arrays' class='heading'>Heterogeneous Arrays.</h1>
+
+<p>Take for exmaple the JSON below:</p>
+<pre class="highlight swift"><code><span class="p">{</span>
+    <span class="s">"users"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+            <span class="s">"name"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">"first"</span><span class="p">:</span> <span class="s">"Caleb"</span><span class="p">,</span>
+                <span class="s">"last"</span><span class="p">:</span> <span class="s">"Kleveter"</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s">"metadata"</span><span class="p">:</span> <span class="p">[</span><span class="mi">42</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="s">"fizz buzz"</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The <code>users</code> data is pretty normal, but the <code>metadata</code> array can&rsquo;t be represented by standard arrays.</p>
+
+<p>The <code>metadata</code> array, when decoded to a <code>JSON</code> instance, will result in this case:</p>
+<pre class="highlight swift"><code><span class="kt">JSON</span><span class="o">.</span><span class="nf">array</span><span class="p">([</span><span class="o">.</span><span class="nf">number</span><span class="p">(</span><span class="o">.</span><span class="nf">int</span><span class="p">(</span><span class="mi">42</span><span class="p">)),</span> <span class="o">.</span><span class="nf">number</span><span class="p">(</span><span class="o">.</span><span class="nf">double</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)),</span> <span class="o">.</span><span class="nf">bool</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span> <span class="o">.</span><span class="nf">string</span><span class="p">(</span><span class="s">"fizz buzz"</span><span class="p">)])</span>
+</code></pre>
+<h1 id='value-unwrapping' class='heading'>Value Unwrapping</h1>
+
+<p>Getting the associated value from an enum case can be a real pain,
+so there are properties for each case to unwrap the value.</p>
+
+<p>If you have the example JSON above, it is an <code>.object</code> case.
+You can use the <code>.object</code> property to get the <code>[String: JSON]</code> value it wraps:</p>
+<pre class="highlight swift"><code><span class="n">json</span><span class="o">.</span><span class="n">object</span> <span class="c1">// [String: JSON]?</span>
+</code></pre>
+
+<p>There are also properties for <code>.null</code>, <code>.string</code>, <code>.bool</code>, <code>.int</code>, <code>.float</code>, <code>.double</code>, and <code>.array</code>.
+Be sure to read the docs for the <code>.null</code> property.</p>
+
+<p>These properties also have setters. They let you set the value of the current <code>JSON</code> case.
+They will set the case regardless the current type, so if the case is a <code>.bool</code>,
+you can use <code>.string</code> and the case will be changed to a <code>.string</code> case.</p>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">json</span> <span class="o">=</span> <span class="kt">JSON</span><span class="o">.</span><span class="nf">bool</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+<span class="n">json</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="s">"Fizz Buzz"</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">json</span><span class="p">)</span> <span class="c1">// "\"Fizz Buzz\""</span>
+</code></pre>
+<h1 id='dynamic-access' class='heading'>Dynamic Access</h1>
+
+<p><code>JSON</code> supports <code>@dynamicMemberLookup</code>, so it is really easy to access values your JSON objects/arrays:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">firstname</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">string</span>
+</code></pre>
+
+<p>This also works for setting JSON values:</p>
+<pre class="highlight swift"><code><span class="n">json</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="s">"Tanner"</span>
+</code></pre>
+
+                        <a href="Enums/JSON.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">JSON</span><span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4JSON6NumberO"></a>
+                    <a name="//apple_ref/swift/Enum/Number" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4JSON6NumberO">Number</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A wrapper for standard numeric types.</p>
+
+                        <a href="Enums/Number.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Number</span><span class="p">:</span> <span class="kt">Codable</span><span class="p">,</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-03-27)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

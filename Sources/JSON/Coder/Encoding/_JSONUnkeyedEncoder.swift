@@ -2,42 +2,42 @@ import Foundation
 
 internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     var codingPath: [CodingKey]
-    var json: JSONContainer
+    var container: JSONContainer
     
-    init(at codingPath: [CodingKey], wrapping json: JSONContainer) {
+    init(at codingPath: [CodingKey], wrapping container: JSONContainer) {
         self.codingPath = codingPath
         
-        precondition(json.isArray, "JSON structure must be an array")
-        self.json = json
+        precondition(container.json.isArray, "JSON structure must be an array")
+        self.container = container
     }
     
     var count: Int {
-        return json.count!
+        return container.json.array?.count ?? 0
     }
     
-    public func encodeNil()             throws { try self.json.append(.null) }
-    public func encode(_ value: Bool)   throws { try self.json.append(value) }
-    public func encode(_ value: Int)    throws { try self.json.append(value) }
-    public func encode(_ value: String) throws { try self.json.append(value) }
-    public func encode(_ value: Float)  throws { try self.json.append(value) }
-    public func encode(_ value: Double) throws { try self.json.append(value) }
+    public func encodeNil()             throws { self.container.json.array?.append(.null) }
+    public func encode(_ value: Bool)   throws { self.container.json.array?.append(value.json) }
+    public func encode(_ value: Int)    throws { self.container.json.array?.append(value.json) }
+    public func encode(_ value: String) throws { self.container.json.array?.append(value.json) }
+    public func encode(_ value: Float)  throws { self.container.json.array?.append(value.json) }
+    public func encode(_ value: Double) throws { self.container.json.array?.append(value.json) }
     
     public func encode<T : Encodable>(_ value: T) throws {
         let encoder = _JSONEncoder(codingPath: self.codingPath + [JSON.CodingKeys(intValue: self.count)])
         try value.encode(to: encoder)
-        try self.json.append(encoder.container.json)
+        self.container.json.array?.append(encoder.container.json)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
-        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: self.json)
+        let container = _JSONKeyedEncoder<NestedKey>(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: self.container)
         return .init(container)
     }
     
     func nestedUnkeyedContainer() -> UnkeyedEncodingContainer {
-        return _JSONUnkeyedEncoder(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: self.json)
+        return _JSONUnkeyedEncoder(at: self.codingPath + [JSON.CodingKeys(intValue: self.count)], wrapping: self.container)
     }
     
     func superEncoder() -> Encoder {
-        return _JSONEncoder(codingPath: self.codingPath, json: self.json)
+        return _JSONEncoder(codingPath: self.codingPath, json: self.container)
     }
 }
