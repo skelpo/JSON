@@ -8,4 +8,4 @@ You can find the API documentation for this library [here](http://www.skelpo.cod
 
 # License
 
-The skelpo/JSON repository is under the [MIT license agreement](https://github.com/skelpo/JSON/blob/develop/LICENSE).
+The skelpo/JSON repository is under the [MIT license agreement](https://github.com/skelpo/JSON/blob/master/LICENSE).
