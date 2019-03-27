@@ -166,6 +166,16 @@ class JSONTests: XCTestCase {
         }
     }
     
+    func testRemove() throws {
+        var json: JSON = ["foo": ["bar": 42]]
+        
+        json.foo.bar = nil
+        XCTAssertEqual(json, .object(["foo": .object(["bar": .null])]))
+        
+        json.remove(["foo", "bar"])
+        XCTAssertEqual(json, .object(["foo": .object([:])]))
+    }
+    
     func testDescription() {
         XCTAssertEqual(JSON.null.description, "null")
         XCTAssertEqual(JSON.bool(true).description, "true")

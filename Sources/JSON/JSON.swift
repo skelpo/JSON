@@ -402,6 +402,52 @@ public enum JSON: Equatable, CustomStringConvertible {
         }
     }
     
+    /// Removes a key/value pair from an object at a given path.
+    ///
+    /// The `JSON` type converts `nil` to it's `.null` case, so if you try to remove a value like this:
+    ///
+    ///     json["foo", "bar"] = nil
+    ///
+    /// You just set the object's property to `null`:
+    ///
+    ///     {
+    ///         "foo": {
+    ///             "bar": null
+    ///         }
+    ///     }
+    ///
+    /// To actually remove a property from an object, you use `.remove(_:)` with the path to the property to remove:
+    ///
+    ///     json.remove(["foo", "bar"])
+    ///
+    /// Will result in this json structure:
+    ///
+    ///     {
+    ///         "foo": {}
+    ///     }
+    ///
+    /// - Parameter path: The key path to the json property to remove.
+    ///
+    /// - Complexity: _O(n)_, where _n_ is the number of elements in the path to remove.
+    ///   Keep in mind that this method is recursive, so each succesive eleemnt in the path will
+    ///   add another call to the stack.
+    public mutating func remove<Path>(_ path: Path) where Path: Collection, Path.Element == String {
+        guard path.count > 0 else { return }
+        if let key = path.first {
+            guard var object = self.object else { return }
+            
+            if path.count == 1 {
+                object[key] = nil
+                self.object = object
+            } else {
+                if var json = object[key] {
+                    json.remove(path.dropFirst())
+                    self[key] = json
+                }
+            }
+        }
+    }
+    
     /// See `CustomStringConvertible.description`.
     ///
     /// This textal representation is compressed, so you might need to prettify it to read it.
