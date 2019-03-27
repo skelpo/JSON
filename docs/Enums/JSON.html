@@ -1042,6 +1042,52 @@ This allows you to unwrap a case to make sure it isn&rsquo;t <code><a href="../E
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4JSONAAO4dataAB10Foundation4DataV_tKcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(data:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4JSONAAO4dataAB10Foundation4DataV_tKcfc">init(data:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a <code>JSON</code> instance from raw JSON data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">)</span><span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The JSON data to decode to <code>JSON</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -1290,6 +1336,81 @@ recursive, so you may have adverse performance for long paths.</p>
                               <td>
                                 <div>
                                   <p>The JSON value to set the index or key to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4JSONAAO6removeyyxSlRzSS7ElementRtzlF"></a>
+                    <a name="//apple_ref/swift/Method/remove(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4JSONAAO6removeyyxSlRzSS7ElementRtzlF">remove(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes a key/value pair from an object at a given path.</p>
+
+<p>The <code>JSON</code> type converts <code>nil</code> to it&rsquo;s <code><a href="../Enums/JSON.html#/s:4JSONAAO4nulls5NeverOSgvp">.null</a></code> case, so if you try to remove a value like this:</p>
+<pre class="highlight swift"><code><span class="n">json</span><span class="p">[</span><span class="s">"foo"</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">nil</span>
+</code></pre>
+
+<p>You just set the object&rsquo;s property to <code><a href="../Enums/JSON.html#/s:4JSONAAO4nulls5NeverOSgvp">null</a></code>:</p>
+<pre class="highlight swift"><code><span class="p">{</span>
+    <span class="s">"foo"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"bar"</span><span class="p">:</span> <span class="n">null</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>To actually remove a property from an object, you use <code>.remove(_:)</code> with the path to the property to remove:</p>
+<pre class="highlight swift"><code><span class="n">json</span><span class="o">.</span><span class="nf">remove</span><span class="p">([</span><span class="s">"foo"</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">])</span>
+</code></pre>
+
+<p>Will result in this json structure:</p>
+<pre class="highlight swift"><code><span class="p">{</span>
+    <span class="s">"foo"</span><span class="p">:</span> <span class="p">{}</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-complexity">
+    <p class="aside-title">Complexity</p>
+    <p><em>O(n)</em>, where <em>n</em> is the number of elements in the path to remove.
+Keep in mind that this method is recursive, so each succesive eleemnt in the path will
+add another call to the stack.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="n">remove</span><span class="o">&lt;</span><span class="kt">Path</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">Path</span><span class="p">)</span> <span class="k">where</span> <span class="kt">Path</span><span class="p">:</span> <span class="kt">Collection</span><span class="p">,</span> <span class="kt">Path</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>path</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key path to the json property to remove.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1868,7 +1989,7 @@ with the values converted to their <code>JSON</code> representations.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-03-21)</p>
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-03-27)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
