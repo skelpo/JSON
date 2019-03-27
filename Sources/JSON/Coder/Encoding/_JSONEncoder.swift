@@ -13,7 +13,7 @@ internal final class _JSONEncoder: Encoder {
     
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
         if self.container == nil { self.container = JSONContainer(json: [:]) }
-        precondition(self.container.isObject, "JSON must have an object structure")
+        precondition(self.container.json.isObject, "JSON must have an object structure")
         
         let container = _JSONKeyedEncoder<Key>(at: self.codingPath, wrapping: self.container)
         return .init(container)
@@ -21,7 +21,7 @@ internal final class _JSONEncoder: Encoder {
     
     func unkeyedContainer() -> UnkeyedEncodingContainer {
         if self.container == nil { self.container = JSONContainer(json: []) }
-        precondition(self.container.isArray, "JSON must have an array structure")
+        precondition(self.container.json.isArray, "JSON must have an array structure")
         
         return _JSONUnkeyedEncoder(at: self.codingPath, wrapping: self.container)
     }
@@ -43,33 +43,5 @@ internal final class JSONContainer {
     
     init(json: JSON) {
         self.json = json
-    }
-    
-    var isObject: Bool {
-        return self.json.isObject
-    }
-    
-    var isArray: Bool {
-        return self.json.isArray
-    }
-    
-    func value<T>(`for` type: T.Type, at path: [CodingKey])throws -> T where T: Decodable {
-        return try self.json.value(for: type, at: path)
-    }
-    
-    func append(_ json: JSON) {
-        self.json.array?.append(json)
-    }
-    
-    func append(_ json: FailableJSONRepresentable)throws {
-        try self.json.array?.append(json.failableJSON())
-    }
-    
-    func set(_ key: String, _ json: JSON) {
-        self.json.set([key], to: json)
-    }
-    
-    func set(_ key: String, to json: FailableJSONRepresentable)throws {
-        try self.json.set([key], to: json.failableJSON())
     }
 }

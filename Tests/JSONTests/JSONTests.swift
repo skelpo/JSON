@@ -1,6 +1,5 @@
 import XCTest
-//@testable import JSON
-@testable import JSONKit
+@testable import JSON
 
 class JSONTests: XCTestCase {
     func testAssociatedValueProperties() {

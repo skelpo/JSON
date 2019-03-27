@@ -1,3 +1,5 @@
+import Foundation
+
 /// A representation of ambigious JSON.
 ///
 /// # Heterogeneous Arrays.
@@ -285,6 +287,16 @@ public enum JSON: Equatable, CustomStringConvertible {
     public init(_ object: [String: JSON]) {
         self = .object(object)
     }
+    
+    #if canImport(Foundation)
+    
+    /// Creates a `JSON` instance from raw JSON data.
+    ///
+    /// - Parameter data: The JSON data to decode to `JSON`.
+    public init(data: Data)throws {
+        self = try JSONDecoder().decode(JSON.self, from: data)
+    }
+    #endif
     
     // MARK: - Public Methods
     
