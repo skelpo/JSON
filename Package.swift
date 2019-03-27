@@ -5,15 +5,11 @@ import PackageDescription
 let package = Package(
     name: "JSON",
     products: [
-        .library(name: "JSON", targets: ["JSON"]),
-        .library(name: "JSONKit", targets: ["JSONKit", "JSON"]),
+        .library(name: "JSON", targets: ["JSON"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0")
-    ],
+    dependencies: [],
     targets: [
         .target(name: "JSON", dependencies: []),
-        .target(name: "JSONKit", dependencies: ["JSON", "Vapor"]),
-        .testTarget(name: "JSONTests", dependencies: ["JSON", "JSONKit"]),
+        .testTarget(name: "JSONTests", dependencies: ["JSON"]),
     ]
 )
