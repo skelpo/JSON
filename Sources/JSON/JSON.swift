@@ -56,7 +56,7 @@ import Foundation
 ///
 ///     json.users.0.name.first = "Tanner"
 @dynamicMemberLookup
-public enum JSON: Equatable, CustomStringConvertible {
+public enum JSON: Hashable, CustomStringConvertible {
     
     // MARK: - Properties
     
