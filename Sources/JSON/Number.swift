@@ -1,5 +1,5 @@
 /// A wrapper for standard numeric types.
-public enum Number: Codable, Equatable, CustomStringConvertible {
+public enum Number: Codable, Hashable, CustomStringConvertible {
     
     /// Wraps an `Int` instance.
     case int(Int)

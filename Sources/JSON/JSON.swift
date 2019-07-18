@@ -56,7 +56,7 @@ import Foundation
 ///
 ///     json.users.0.name.first = "Tanner"
 @dynamicMemberLookup
-public enum JSON: Equatable, CustomStringConvertible {
+public enum JSON: Hashable, CustomStringConvertible {
     
     // MARK: - Properties
     
@@ -287,7 +287,14 @@ public enum JSON: Equatable, CustomStringConvertible {
     public init(_ object: [String: JSON]) {
         self = .object(object)
     }
-    
+
+    /// Creates a `JSON` instance with the `.number` case.
+    ///
+    /// - Parameter fwi: A fixed-width integer which is converted to an `Int` and then passed into a `.number(.int)` case.
+    public init<I>(_ fwi: I) where I: FixedWidthInteger {
+        self = .number(.int(Int(fwi)))
+    }
+
     #if canImport(Foundation)
     
     /// Creates a `JSON` instance from raw JSON data.

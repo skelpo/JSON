@@ -19,7 +19,16 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     func encode(_ value: String, forKey key: Key) throws { self.container.json[key.stringValue] = value.json }
     func encode(_ value: Float, forKey key: Key)  throws { self.container.json[key.stringValue] = value.json }
     func encode(_ value: Double, forKey key: Key) throws { self.container.json[key.stringValue] = value.json }
-    
+
+    func encode(_ value: Int8, forKey key: Key)   throws { self.container.json[key.stringValue] = value.json }
+    func encode(_ value: Int16, forKey key: Key)  throws { self.container.json[key.stringValue] = value.json }
+    func encode(_ value: Int32, forKey key: Key)  throws { self.container.json[key.stringValue] = value.json }
+    func encode(_ value: Int64, forKey key: Key)  throws { self.container.json[key.stringValue] = value.json }
+    func encode(_ value: UInt8, forKey key: Key)   throws { self.container.json[key.stringValue] = value.json }
+    func encode(_ value: UInt16, forKey key: Key)  throws { self.container.json[key.stringValue] = value.json }
+    func encode(_ value: UInt32, forKey key: Key)  throws { self.container.json[key.stringValue] = value.json }
+    func encode(_ value: UInt64, forKey key: Key)  throws { self.container.json[key.stringValue] = value.json }
+
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {        
         let encoder = _JSONEncoder(codingPath: self.codingPath + [key])
         try value.encode(to: encoder)

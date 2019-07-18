@@ -1,23 +1,61 @@
 import Foundation
 
 extension JSON {
-    
-    /// Indicates whether the `JSON` case of the currenct instance is `.object` or not.
+
+    /// Indicates whether this case is a `.null`.
+    public var isNull: Bool {
+        guard case .null = self else { return false }
+        return true
+    }
+
+    /// Indicates whether this case is a `.bool`.
+    public var isBool: Bool {
+        guard case .bool = self else { return false }
+        return true
+    }
+
+    /// Indicates whether this case is a `.string`.
+    public var isString: Bool {
+        guard case .string = self else { return false }
+        return true
+    }
+
+    /// Indicates whether this case is a `.number`.
+    public var isNumber: Bool {
+        guard case .number = self else { return false }
+        return true
+    }
+
+    /// Indicates whether this case is a `.number(.int)`.
+    public var isInt: Bool {
+        guard case let .number(num) = self, case .int = num else { return false }
+        return true
+    }
+
+    /// Indicates whether this case is a `.number(.float)`.
+    public var isFloat: Bool {
+        guard case let .number(num) = self, case .float = num else { return false }
+        return true
+    }
+
+    /// Indicates whether this case is a `.number(.double)`.
+    public var isDouble: Bool {
+        guard case let .number(num) = self, case .double = num else { return false }
+        return true
+    }
+
+    /// Indicates whether the case is a`.object`.
     public var isObject: Bool {
-        switch self {
-        case .object: return true
-        default: return false
-        }
+        guard case .object = self else { return false }
+        return true
     }
     
-    /// Indicates whether the `JSON` case of the currenct instance is `.array` or not.
+    /// Indicates whether the case is an`.array`.
     public var isArray: Bool {
-        switch self {
-        case .array: return true
-        default: return false
-        }
+        guard case .array = self else { return false }
+        return true
     }
-    
+
     func value<T>(`for` type: T.Type, at path: [CodingKey])throws -> T where T: Decodable {
         let error = DecodingError.expectedType(T.self, at: path, from: self)
         
@@ -42,7 +80,7 @@ extension JSON {
         }
     }
     
-    fileprivate func number<T: SignedInteger>(at path: [CodingKey], as type: T.Type)throws -> T {
+    internal func number<T: FixedWidthInteger>(at path: [CodingKey], as type: T.Type)throws -> T {
         let error = DecodingError.expectedType(T.self, at: path, from: self)
 
         guard case let JSON.number(number) = self else {
@@ -56,7 +94,7 @@ extension JSON {
         }
     }
     
-    fileprivate func number<T: BinaryFloatingPoint>(at path: [CodingKey], as type: T.Type)throws -> T {
+    internal func number<T: BinaryFloatingPoint>(at path: [CodingKey], as type: T.Type)throws -> T {
         let error = DecodingError.expectedType(T.self, at: path, from: self)
         
         guard case let JSON.number(number) = self else {

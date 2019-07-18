@@ -56,7 +56,7 @@ class JSONTests: XCTestCase {
     }
     
     func testDynamicAccessGet()throws {
-        var weather = try JSON(data: Data(json.utf8))
+        let weather = try JSON(data: Data(json.utf8))
         XCTAssertEqual(weather.minutely.data.0.time.int, 1517594040)
         
         measure {

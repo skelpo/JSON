@@ -131,3 +131,23 @@ extension Dictionary: JSONRepresentable where Key == String, Value: JSONRepresen
         }
     }
 }
+
+extension FixedWidthInteger {
+    public var json: JSON {
+        return .number(.int(Int(self)))
+    }
+
+    public init?(json: JSON) {
+        guard let int = json.int else { return nil }
+        self.init(int)
+    }
+}
+
+extension Int8: JSONRepresentable { }
+extension Int16: JSONRepresentable { }
+extension Int32: JSONRepresentable { }
+extension Int64: JSONRepresentable { }
+extension UInt8: JSONRepresentable { }
+extension UInt16: JSONRepresentable { }
+extension UInt32: JSONRepresentable { }
+extension UInt64: JSONRepresentable { }
