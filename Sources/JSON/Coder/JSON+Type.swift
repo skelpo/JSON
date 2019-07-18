@@ -80,7 +80,7 @@ extension JSON {
         }
     }
     
-    fileprivate func number<T: SignedInteger>(at path: [CodingKey], as type: T.Type)throws -> T {
+    internal func number<T: FixedWidthInteger>(at path: [CodingKey], as type: T.Type)throws -> T {
         let error = DecodingError.expectedType(T.self, at: path, from: self)
 
         guard case let JSON.number(number) = self else {
@@ -94,7 +94,7 @@ extension JSON {
         }
     }
     
-    fileprivate func number<T: BinaryFloatingPoint>(at path: [CodingKey], as type: T.Type)throws -> T {
+    internal func number<T: BinaryFloatingPoint>(at path: [CodingKey], as type: T.Type)throws -> T {
         let error = DecodingError.expectedType(T.self, at: path, from: self)
         
         guard case let JSON.number(number) = self else {

@@ -42,14 +42,31 @@ internal struct _JSONKeyedValueDecoder<K: CodingKey>: KeyedDecodingContainerProt
         
         return try json.value(for: type, at: self.codingPath)
     }
-    
-    func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool { return try _decode(type, forKey: key) }
-    func decode(_ type: Int.Type, forKey key: K)    throws -> Int { return try _decode(type, forKey: key) }
-    func decode(_ type: Float.Type, forKey key: K)  throws -> Float { return try _decode(type, forKey: key) }
+
+    func _decode<T>(_ type: T.Type, forKey key: Key)throws -> T where T: Decodable & FixedWidthInteger {
+        guard let json = self.json[key.stringValue] else {
+            throw DecodingError.badKey(key, at: self.codingPath)
+        }
+
+        return try json.number(at: self.codingPath, as: type)
+    }
+
+    func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool   { return try _decode(type, forKey: key) }
+    func decode(_ type: Int.Type, forKey key: K)    throws -> Int    { return try _decode(type, forKey: key) }
+    func decode(_ type: Float.Type, forKey key: K)  throws -> Float  { return try _decode(type, forKey: key) }
     func decode(_ type: Double.Type, forKey key: K) throws -> Double { return try _decode(type, forKey: key) }
     func decode(_ type: String.Type, forKey key: K) throws -> String { return try _decode(type, forKey: key) }
     func decode<T>(_ type: T.Type, forKey key: K)   throws -> T where T : Decodable { return try _decode(type, forKey: key) }
-    
+
+    func decode(_ type: Int8.Type, forKey key: K) throws -> Int8 { return try _decode(type, forKey: key) }
+    func decode(_ type: Int16.Type, forKey key: K) throws -> Int16 { return try _decode(type, forKey: key) }
+    func decode(_ type: Int32.Type, forKey key: K) throws -> Int32 { return try _decode(type, forKey: key) }
+    func decode(_ type: Int64.Type, forKey key: K) throws -> Int64 { return try _decode(type, forKey: key) }
+    func decode(_ type: UInt8.Type, forKey key: K) throws -> UInt8 { return try _decode(type, forKey: key) }
+    func decode(_ type: UInt16.Type, forKey key: K) throws -> UInt16 { return try _decode(type, forKey: key) }
+    func decode(_ type: UInt32.Type, forKey key: K) throws -> UInt32 { return try _decode(type, forKey: key) }
+    func decode(_ type: UInt64.Type, forKey key: K) throws -> UInt64 { return try _decode(type, forKey: key) }
+
     private func _superDecoder(forKey key: CodingKey) throws -> Decoder {
         let value = self.json[key.stringValue] ?? JSON.null
         return _JSONDecoder(codingPath: self.codingPath + [key], json: value)
