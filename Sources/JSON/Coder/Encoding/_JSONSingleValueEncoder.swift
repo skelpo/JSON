@@ -1,16 +1,16 @@
 import Foundation
 
 internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
+    let encoder:_JSONEncoder
     var codingPath: [CodingKey]
-    var container: JSONContainer
     
-    init(at codingPath: [CodingKey], wrapping container: JSONContainer) {
-        self.codingPath = codingPath
-        self.container = container
+    init(for encoder: _JSONEncoder, path: [CodingKey]? = nil) {
+        self.encoder = encoder
+        self.codingPath = path ?? encoder.codingPath
     }
     
     func _encode<T>(_ value: T) where T: SafeJSONRepresentable {
-        self.container.json = value.json
+        self.encoder.container.assign(path: self.codingPath.map { $0.stringValue }, to: value.json)
     }
     
     func encodeNil()             throws { _encode(JSON.null) }
@@ -30,8 +30,6 @@ internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
     func encode(_ value: UInt64) throws { _encode(value) }
 
     func encode<T : Encodable>(_ value: T) throws {
-        let encoder = _JSONEncoder(codingPath: self.codingPath)
-        try value.encode(to: encoder)
-        self.container.json = encoder.container.json
+        try value.encode(to: self.encoder)
     }
 }

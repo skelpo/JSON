@@ -103,7 +103,23 @@ final class JSONCodingTests: XCTestCase {
             }
         }
     }
-    
+
+    func testDecodeNested() throws {
+        let data = nestedJSON.data(using: .utf8)!
+        let user = try JSONDecoder().decode(NestedUser.self, from: data)
+
+        XCTAssertEqual(user, NestedUser.default)
+    }
+
+    @available(OSX 10.13, *)
+    func testEncodeNested() throws {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        
+        let data = try encoder.encode(NestedUser.default)
+        XCTAssertEqual(String(decoding: data, as: UTF8.self), nestedJSON)
+    }
+
     func testDecodingNestedJSON() {
         do {
             let data = json.data(using: .utf8)!
