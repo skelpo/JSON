@@ -13,22 +13,18 @@ internal final class _JSONEncoder: Encoder {
     
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
         if self.container == nil { self.container = JSONContainer(json: [:]) }
-        precondition(self.container.json.isObject, "JSON must have an object structure")
-        
-        let container = _JSONKeyedEncoder<Key>(at: self.codingPath, wrapping: self.container)
+        let container = _JSONKeyedEncoder<Key>(for: self, path: self.codingPath)
         return .init(container)
     }
     
     func unkeyedContainer() -> UnkeyedEncodingContainer {
         if self.container == nil { self.container = JSONContainer(json: []) }
-        precondition(self.container.json.isArray, "JSON must have an array structure")
-        
-        return _JSONUnkeyedEncoder(at: self.codingPath, wrapping: self.container)
+        return _JSONUnkeyedEncoder(for: self, path: self.codingPath)
     }
     
     func singleValueContainer() -> SingleValueEncodingContainer {
         if self.container == nil { self.container = JSONContainer(json: .null) }
-        return _JSONSingleValueEncoder(at: self.codingPath, wrapping: self.container)
+        return _JSONSingleValueEncoder(for: self, path: self.codingPath)
     }
     
     static func encode<T>(_ t: T)throws -> JSON where T: Encodable {
@@ -40,8 +36,22 @@ internal final class _JSONEncoder: Encoder {
 
 internal final class JSONContainer {
     var json: JSON
-    
+
     init(json: JSON) {
         self.json = json
+    }
+
+    func assign(path: [String] = [], key: String, to value: JSON) {
+        self.json.set(path + [key], to: value)
+    }
+
+    func assign(path: [String] = [], to value: JSON) {
+        switch self.json.get(path) {
+        case var .array(elements):
+            elements.append(value)
+            self.json.set(path, to: .array(elements))
+        default:
+            self.json.set(path, to: value)
+        }
     }
 }
