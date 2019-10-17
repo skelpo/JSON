@@ -1,3 +1,5 @@
+import Foundation
+
 /// A wrapper for standard numeric types.
 public enum Number: Codable, Hashable, CustomStringConvertible {
     
@@ -9,6 +11,9 @@ public enum Number: Codable, Hashable, CustomStringConvertible {
     
     /// Wraps a `Double` instance.
     case double(Double)
+
+    /// Wraps a `Decimal` instance.
+    case decimal(Decimal)
     
     /// See `Decodable.init(from:)`.
     public init(from decoder: Decoder) throws {
@@ -19,6 +24,8 @@ public enum Number: Codable, Hashable, CustomStringConvertible {
             self = .float(float)
         } else if let double = try? container.decode(Double.self) {
             self = .double(double)
+        } else if let raw = try? container.decode(String.self), let decimal = Decimal(string: raw) {
+            self = .decimal(decimal)
         } else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "No number type found")
         }
@@ -31,6 +38,7 @@ public enum Number: Codable, Hashable, CustomStringConvertible {
         case let .int(int): try container.encode(int)
         case let .float(float): try container.encode(float)
         case let .double(double): try container.encode(double)
+        case let .decimal(decimal): try container.encode(decimal.description)
         }
     }
     
@@ -40,6 +48,7 @@ public enum Number: Codable, Hashable, CustomStringConvertible {
         case let .int(int): return String(describing: int)
         case let .float(float): return String(describing: float)
         case let .double(double): return String(describing: double)
+        case let .decimal(decimal): return String(describing: decimal)
         }
     }
 }

@@ -30,6 +30,8 @@ internal struct _JSONSingleValueDecoder: SingleValueDecodingContainer {
     func decode(_ type: UInt16.Type) throws -> UInt16 { return try self.json.number(at: self.codingPath, as: type) }
     func decode(_ type: UInt32.Type) throws -> UInt32 { return try self.json.number(at: self.codingPath, as: type) }
     func decode(_ type: UInt64.Type) throws -> UInt64 { return try self.json.number(at: self.codingPath, as: type) }
+    func decode(_ type: Decimal.Type) throws -> Decimal { return try self.json.value(for: type, at: self.codingPath) }
+
 
     func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         let decoder = _JSONDecoder(codingPath: self.codingPath, json: self.json)

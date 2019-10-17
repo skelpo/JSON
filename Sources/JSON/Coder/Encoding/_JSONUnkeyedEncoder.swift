@@ -33,6 +33,7 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     func encode(_ value: UInt16) throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: UInt32) throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: UInt64) throws { self.container.assign(path: self.jsonPath, to: value.json) }
+    func encode(_ value: Decimal) throws { self.container.assign(path: self.jsonPath, to: value.json) }
 
     func encode<T : Encodable>(_ value: T) throws {
         try value.encode(to: encoder)
