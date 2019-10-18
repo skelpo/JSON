@@ -72,10 +72,9 @@ extension JSON {
         case is Double.Type:
             return try self.number(at: path, as: Double.self) as! T
         case is Decimal.Type:
-            guard case let .number(.decimal(value)) = self else {
-                throw DecodingError.expectedType(Decimal.self, at: path, from: self)
-            }
-            return value as! T
+            if case let .number(.decimal(value)) = self { return value as! T }
+            if let value = try? Decimal(json: self) { return value as! T }
+            throw DecodingError.expectedType(Decimal.self, at: path, from: self)
         case is String.Type:
             guard case let JSON.string(value) = self else {
                 throw error
