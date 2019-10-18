@@ -61,7 +61,6 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
     mutating func decode(_ type: UInt16.Type) throws -> UInt16 { return try self.pop(as: type) }
     mutating func decode(_ type: UInt32.Type) throws -> UInt32 { return try self.pop(as: type) }
     mutating func decode(_ type: UInt64.Type) throws -> UInt64 { return try self.pop(as: type) }
-    mutating func decode(_ type: Decimal.Type) throws -> Decimal { return try self.pop(as: type) }
 
     // TODO: - https://github.com/apple/swift/blob/master/stdlib/public/SDK/Foundation/JSONEncoder.swift#L1852
     mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {

@@ -33,11 +33,13 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     func encode(_ value: UInt16) throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: UInt32) throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: UInt64) throws { self.container.assign(path: self.jsonPath, to: value.json) }
-    func encode(_ value: Decimal) throws { self.container.assign(path: self.jsonPath, to: value.json) }
-    func encode(_ value: Decimal?) throws { self.container.assign(path: self.jsonPath, to: value.json) }
 
     func encode<T : Encodable>(_ value: T) throws {
-        try value.encode(to: encoder)
+        if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
+            self.container.assign(path: self.jsonPath, to: json)
+        } else {
+            try value.encode(to: encoder)
+        }
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
@@ -51,15 +53,5 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     
     func superEncoder() -> Encoder {
         return _JSONEncoder(codingPath: self.codingPath, json: self.container)
-    }
-}
-
-extension UnkeyedEncodingContainer {
-    func encode(_ value: Decimal) throws {
-        if let container = self as? _JSONUnkeyedEncoder {
-            try container.encode(value)
-        } else {
-            try self.encode(value)
-        }
     }
 }

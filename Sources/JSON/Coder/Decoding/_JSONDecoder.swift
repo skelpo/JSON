@@ -33,6 +33,10 @@ internal final class _JSONDecoder: Decoder {
     }
     
     static func decode<T>(_ type: T.Type, from json: JSON)throws -> T where T: Decodable {
+        if let value = (type as? LosslessJSONConvertible.Type)?.init(json: json) {
+            return value as! T
+        }
+
         let decoder = self.init(codingPath: [], json: json)
         return try T.init(from: decoder)
     }

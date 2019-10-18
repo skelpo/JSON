@@ -28,20 +28,12 @@ internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
     func encode(_ value: UInt16) throws { _encode(value) }
     func encode(_ value: UInt32) throws { _encode(value) }
     func encode(_ value: UInt64) throws { _encode(value) }
-    func encode(_ value: Decimal) throws { _encode(value) }
-    func encode(_ value: Decimal?) throws { _encode(value) }
 
     func encode<T : Encodable>(_ value: T) throws {
-        try value.encode(to: self.encoder)
-    }
-}
-
-extension SingleValueEncodingContainer {
-    func encode(_ value: Decimal) throws {
-        if let container = self as? _JSONSingleValueEncoder {
-            try container.encode(value)
+        if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
+            _encode(json)
         } else {
-            try self.encode(value)
+            try value.encode(to: self.encoder)
         }
     }
 }

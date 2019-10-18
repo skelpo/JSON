@@ -31,14 +31,16 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     func encode(_ value: UInt16, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: UInt32, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: UInt64, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
-    func encode(_ value: Decimal, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
-    func encode(_ value: Decimal?, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
 
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
-        self.encoder.codingPath.append(key)
-        defer { self.encoder.codingPath.removeLast() }
+        if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
+            self.container.assign(path: self.jsonPath, key: key.stringValue, to: json)
+        } else {
+            self.encoder.codingPath.append(key)
+            defer { self.encoder.codingPath.removeLast() }
 
-        try value.encode(to: self.encoder)
+            try value.encode(to: self.encoder)
+        }
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: K) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
@@ -56,15 +58,5 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     
     func superEncoder(forKey key: K) -> Encoder {
         return _JSONEncoder(codingPath: self.codingPath + [key], json: self.container)
-    }
-}
-
-extension KeyedEncodingContainer {
-    mutating func encode(_ value: Decimal, forKey key: Key) throws {
-        if let container = (self.superEncoder(forKey: key) as? _JSONEncoder)?.singleValueContainer() {
-            try container.encode(value)
-        } else {
-            try self.encode(value, forKey: key)
-        }
     }
 }
