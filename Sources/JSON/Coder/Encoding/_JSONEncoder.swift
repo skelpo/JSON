@@ -7,8 +7,8 @@ internal final class _JSONEncoder: Encoder {
     
     init(codingPath: [CodingKey] = [], json: JSONContainer? = nil) {
         self.codingPath = codingPath
-        self.userInfo = [:]
         self.container = json
+        self.userInfo = [:]
     }
     
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {

@@ -32,6 +32,7 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     func encode(_ value: UInt32, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: UInt64, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: Decimal, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
+    func encode(_ value: Decimal?, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
 
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
         self.encoder.codingPath.append(key)
@@ -58,3 +59,12 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     }
 }
 
+extension KeyedEncodingContainer {
+    mutating func encode(_ value: Decimal, forKey key: Key) throws {
+        if let container = (self.superEncoder(forKey: key) as? _JSONEncoder)?.singleValueContainer() {
+            try container.encode(value)
+        } else {
+            try self.encode(value, forKey: key)
+        }
+    }
+}
