@@ -16,6 +16,8 @@ internal final class _JSONDecoder: Decoder {
             throw DecodingError.expectedType([String: JSON].self, at: self.codingPath, from: self.json)
         }
         
+        print("container")
+        
         let container = _JSONKeyedValueDecoder<Key>.init(at: self.codingPath, wrapping: json)
         return KeyedDecodingContainer(container)
     }
@@ -25,6 +27,8 @@ internal final class _JSONDecoder: Decoder {
             throw DecodingError.expectedType([JSON].self, at: self.codingPath, from: self.json)
         }
         
+        print("unkey container")
+        
         return _JSONUnkeyedDecoder(at: self.codingPath, wrapping: json)
     }
     
@@ -33,11 +37,13 @@ internal final class _JSONDecoder: Decoder {
     }
     
     static func decode<T>(_ type: T.Type, from json: JSON)throws -> T where T: Decodable {
+        print("decoding: ", type, json)
         if let value = (type as? LosslessJSONConvertible.Type)?.init(json: json) {
             return value as! T
         }
-
+        print("still here")
         let decoder = self.init(codingPath: [], json: json)
+        print("still")
         return try T.init(from: decoder)
     }
 }

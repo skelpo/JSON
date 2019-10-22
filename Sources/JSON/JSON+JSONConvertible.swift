@@ -92,13 +92,13 @@ extension Decimal: JSONRepresentable {
 
     /// See `SafeJSONRepresentable.json`.
     public var json: JSON {
-        return .number(.decimal(self))
+        return .string(NSDecimalNumber(decimal: self).stringValue)
     }
 
     /// See `LosslessJSONConvertible.init(json:)`.
     public init?(json: JSON) {
-        guard let decimal = json.decimal else { return nil }
-        self = decimal
+        guard let decimal = json.string else { return nil }
+        self = Decimal(string: decimal)!
     }
 }
 
