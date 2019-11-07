@@ -8,9 +8,42 @@ final class JSONCodingTests: XCTestCase {
         "firstname": "Caleb",
         "lastname": "Kleveter",
         "username": "caleb_kleveter",
-        "password": "fizzbuzzfoobar"
+        "password": "fizzbuzzfoobar",
+        "favorites": ["Orange", "Blue"],
+        "relatives": ["Father", "Mother", "Sister", "Brother"]
     ]
-    
+
+    private let user = User(
+        username: "caleb_kleveter", lastname: "Kleveter", firstname: "Caleb", age: 17, password: "fizzbuzzfoobar", isAdmin: false, favorites: ["Orange", "Blue"],
+        relatives: ["Father", "Mother", "Sister", "Brother"]
+    )
+
+    func testUserJSONDecoding()throws {
+        let user = try self.intialize(User.self, with: self.userJSON)
+
+        XCTAssertEqual(user.isAdmin, userJSON.isAdmin.bool)
+        XCTAssertEqual(user.age, userJSON.age.int)
+        XCTAssertEqual(user.firstname, userJSON.firstname.string)
+        XCTAssertEqual(user.lastname, userJSON.lastname.string)
+        XCTAssertEqual(user.username, userJSON.username.string)
+        XCTAssertEqual(user.password, userJSON.password.string)
+        XCTAssertEqual(user.favorites, Set(userJSON.favorites.array?.compactMap { $0.string } ?? []))
+        XCTAssertEqual(user.relatives, userJSON.relatives.array?.compactMap { $0.string })
+    }
+
+    func testUserJSONEncoding()throws {
+        let json = try JSONCoder.encode(user)
+
+        XCTAssertEqual(json.isAdmin.bool, user.isAdmin)
+        XCTAssertEqual(json.age.int, user.age)
+        XCTAssertEqual(json.firstname.string, user.firstname)
+        XCTAssertEqual(json.lastname.string, user.lastname)
+        XCTAssertEqual(json.username.string, user.username)
+        XCTAssertEqual(json.password.string, user.password)
+        XCTAssertEqual(Set(json.favorites.array?.compactMap { $0.string } ?? []), user.favorites)
+        XCTAssertEqual(json.relatives.array?.compactMap { $0.string }, user.relatives)
+    }
+
     func testJSONDecoding()throws {
         let data = json.data(using: .utf8)!
         let j = try JSONDecoder().decode(JSON.self, from: data)
@@ -61,10 +94,9 @@ final class JSONCodingTests: XCTestCase {
     }
     
     func testToJSON() {
-        let user = User(username: "caleb_kleveter", lastname: "Kleveter", firstname: "Caleb", age: 17, password: "fizzbuzzfoobar", isAdmin: false)
         measure {
             do {
-                _ = try user.json()
+                _ = try self.user.json()
             } catch let error {
                 XCTFail("\(error)")
             }
@@ -248,6 +280,8 @@ fileprivate struct User: Codable {
     let age: Int
     let password: String
     let isAdmin: Bool
+    let favorites: Set<String>
+    let relatives: [String]
 }
 
 let smallData = """

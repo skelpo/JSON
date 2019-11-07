@@ -12,6 +12,7 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
         self.codingPath = path ?? encoder.codingPath
 
         self.jsonPath = self.codingPath.map { $0.stringValue }
+        self.container.assign(path: self.jsonPath, to: [])
     }
     
     var count: Int {
