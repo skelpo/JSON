@@ -36,7 +36,6 @@ internal final class _JSONDecoder: Decoder {
         if let value = (type as? LosslessJSONConvertible.Type)?.init(json: json) {
             return value as! T
         }
-
         let decoder = self.init(codingPath: [], json: json)
         return try T.init(from: decoder)
     }
