@@ -30,6 +30,10 @@ internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
     func encode(_ value: UInt64) throws { _encode(value) }
 
     func encode<T : Encodable>(_ value: T) throws {
-        try value.encode(to: self.encoder)
+        if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
+            _encode(json)
+        } else {
+            try value.encode(to: self.encoder)
+        }
     }
 }

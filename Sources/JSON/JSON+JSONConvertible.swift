@@ -1,3 +1,5 @@
+import Foundation
+
 extension JSON: JSONRepresentable {
     
     /// See `SafeJSONRepresentable.json`.
@@ -85,6 +87,21 @@ extension Double: JSONRepresentable {
         self = string
     }
 }
+
+extension Decimal: JSONRepresentable {
+
+    /// See `SafeJSONRepresentable.json`.
+    public var json: JSON {
+        return .string(NSDecimalNumber(decimal: self).stringValue)
+    }
+
+    /// See `LosslessJSONConvertible.init(json:)`.
+    public init?(json: JSON) {
+        guard let decimal = json.string else { return nil }
+        self = Decimal(string: decimal)!
+    }
+}
+
 
 extension Bool: JSONRepresentable {
     

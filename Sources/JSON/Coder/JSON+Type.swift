@@ -71,6 +71,13 @@ extension JSON {
             return try self.number(at: path, as: Float.self) as! T
         case is Double.Type:
             return try self.number(at: path, as: Double.self) as! T
+        case is Decimal.Type:
+            guard case let JSON.string(value) = self else {
+                throw error
+            }
+            return Decimal(string: value ) as! T
+            //if case let .number(.decimal(value)) = self { return value as! T }
+            //throw DecodingError.expectedType(Decimal.self, at: path, from: self)
         case is String.Type:
             guard case let JSON.string(value) = self else {
                 throw error
@@ -91,6 +98,7 @@ extension JSON {
         case let .int(value): return T.init(value)
         case let .float(value): return T.init(value)
         case let .double(value): return T.init(value)
+        case let .decimal(value): return T.init(NSDecimalNumber(decimal: value).doubleValue)
         }
     }
     
@@ -105,6 +113,7 @@ extension JSON {
         case let .int(value): return T.init(value)
         case let .float(value): return T.init(value)
         case let .double(value): return T.init(value)
+        case let .decimal(value): return T.init(NSDecimalNumber(decimal: value).doubleValue)
         }
     }
 }

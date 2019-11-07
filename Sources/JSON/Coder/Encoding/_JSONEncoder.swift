@@ -7,8 +7,8 @@ internal final class _JSONEncoder: Encoder {
     
     init(codingPath: [CodingKey] = [], json: JSONContainer? = nil) {
         self.codingPath = codingPath
-        self.userInfo = [:]
         self.container = json
+        self.userInfo = [:]
     }
     
     func container<Key>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> where Key : CodingKey {
@@ -28,9 +28,13 @@ internal final class _JSONEncoder: Encoder {
     }
     
     static func encode<T>(_ t: T)throws -> JSON where T: Encodable {
-        let encoder = _JSONEncoder()
-        try t.encode(to: encoder)
-        return encoder.container.json
+        if let json = try? (t as? FailableJSONRepresentable)?.failableJSON() {
+            return json
+        } else {
+            let encoder = _JSONEncoder()
+            try t.encode(to: encoder)
+            return encoder.container.json
+        }
     }
 }
 

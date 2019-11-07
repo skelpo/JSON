@@ -1,6 +1,19 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/JSON+JSONConvertible.swift",
+      "line": 153,
+      "symbol": "FixedWidthInteger.json",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/calebkleveter/Development/Skelpo/JSON/Sources/JSON/JSON+JSONConvertible.swift",
+      "line": 157,
+      "symbol": "FixedWidthInteger.init(json:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
   ],
   "source_directory": "/Users/calebkleveter/Development/Skelpo/JSON"
 }

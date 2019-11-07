@@ -65,7 +65,6 @@ internal struct _JSONKeyedValueDecoder<K: CodingKey>: KeyedDecodingContainerProt
     func decode(_ type: UInt8.Type, forKey key: K) throws -> UInt8 { return try _decode(type, forKey: key) }
     func decode(_ type: UInt16.Type, forKey key: K) throws -> UInt16 { return try _decode(type, forKey: key) }
     func decode(_ type: UInt32.Type, forKey key: K) throws -> UInt32 { return try _decode(type, forKey: key) }
-    func decode(_ type: UInt64.Type, forKey key: K) throws -> UInt64 { return try _decode(type, forKey: key) }
 
     private func _superDecoder(forKey key: CodingKey) throws -> Decoder {
         let value = self.json[key.stringValue] ?? JSON.null

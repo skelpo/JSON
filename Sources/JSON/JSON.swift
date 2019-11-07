@@ -135,7 +135,20 @@ public enum JSON: Hashable, CustomStringConvertible {
             self = newValue.map(Number.double).map(JSON.number) ?? .null
         }
     }
-    
+
+    /// Accesses the value of a `Number.decimal` case wrapped in a `.number` case.
+    ///
+    /// The setter will set the JSON case regardles the current type.
+    public var decimal: Decimal? {
+        get {
+            guard case let .number(.decimal(value)) = self else { return nil }
+            return value
+        }
+        set {
+            self = newValue.map(Number.decimal).map(JSON.number) ?? .null
+        }
+    }
+
     /// Accesses the value of an `.array` case.
     ///
     /// The setter will set the JSON case regardles the current type.
@@ -273,7 +286,14 @@ public enum JSON: Hashable, CustomStringConvertible {
     public init(_ double: Double) {
         self = .number(.double(double))
     }
-    
+
+    /// Creates a `JSON` instance with the `.number(Number.decimal)` case.
+    ///
+    /// - Parameter decimal: The `Decimal` held by the `.decimal` case.
+    public init(_ decimal: Decimal) {
+        self = .number(.decimal(decimal))
+    }
+
     /// Creates a `JSON` instance with the `.array` case.
     ///
     /// - Parameter array: The `JSON` values held by the `.array` case.
