@@ -39,7 +39,7 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
             self.encoder.codingPath.append(key)
             defer { self.encoder.codingPath.removeLast() }
 
-            try value.encode(to: self.encoder)
+            try self.container.assign(path: self.jsonPath, key: key.stringValue, to: _JSONEncoder.encode(value))
         }
     }
     
