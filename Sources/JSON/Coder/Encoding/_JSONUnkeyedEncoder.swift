@@ -12,7 +12,6 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
         self.codingPath = path ?? encoder.codingPath
 
         self.jsonPath = self.codingPath.map { $0.stringValue }
-        self.container.assign(path: self.jsonPath, to: [])
     }
     
     var count: Int {
@@ -39,7 +38,7 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
         if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
             self.container.assign(path: self.jsonPath, to: json)
         } else {
-            try value.encode(to: encoder)
+            try self.container.assign(path: self.jsonPath, to: _JSONEncoder.encode(value))
         }
     }
     
