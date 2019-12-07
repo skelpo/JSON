@@ -29,11 +29,6 @@ internal final class _JSONSingleValueEncoder: SingleValueEncodingContainer {
     func encode(_ value: UInt32) throws { _encode(value) }
     func encode(_ value: UInt64) throws { _encode(value) }
 
-    func encode(_ value: Date) throws {
-        let json = JSON.number(.double(value.timeIntervalSince1970))
-        self.encoder.container.assign(path: self.codingPath.map { $0.stringValue }, to: json)
-    }
-
     func encode<T : Encodable>(_ value: T) throws {
         if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
             _encode(json)

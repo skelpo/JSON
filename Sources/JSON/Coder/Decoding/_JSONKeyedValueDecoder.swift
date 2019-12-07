@@ -66,18 +66,6 @@ internal struct _JSONKeyedValueDecoder<K: CodingKey>: KeyedDecodingContainerProt
     func decode(_ type: UInt16.Type, forKey key: K) throws -> UInt16 { return try _decode(type, forKey: key) }
     func decode(_ type: UInt32.Type, forKey key: K) throws -> UInt32 { return try _decode(type, forKey: key) }
 
-    func decode(_ type: Date.Type, forKey key: K) throws -> Date {
-        guard let json = self.json[key.stringValue] else {
-            throw DecodingError.badKey(key, at: self.codingPath)
-        }
-
-        guard case let .number(.double(interval)) = json  else {
-            throw DecodingError.expectedType(Double.self, at: self.codingPath, from: json)
-        }
-
-        return Date(timeIntervalSince1970: interval)
-    }
-
     private func _superDecoder(forKey key: CodingKey) throws -> Decoder {
         let value = self.json[key.stringValue] ?? JSON.null
         return _JSONDecoder(codingPath: self.codingPath + [key], json: value)

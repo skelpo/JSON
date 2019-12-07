@@ -30,13 +30,6 @@ internal struct _JSONSingleValueDecoder: SingleValueDecodingContainer {
     func decode(_ type: UInt16.Type) throws -> UInt16 { return try self.json.number(at: self.codingPath, as: type) }
     func decode(_ type: UInt32.Type) throws -> UInt32 { return try self.json.number(at: self.codingPath, as: type) }
 
-    func decode(_ type: Date.Type) throws -> Date {
-        guard case let .number(.double(interval)) = self.json  else {
-            throw DecodingError.expectedType(Double.self, at: self.codingPath, from: json)
-        }
-
-        return Date(timeIntervalSince1970: interval)
-    }
 
     func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
         let decoder = _JSONDecoder(codingPath: self.codingPath, json: self.json)
