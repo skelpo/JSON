@@ -62,6 +62,15 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
     mutating func decode(_ type: UInt32.Type) throws -> UInt32 { return try self.pop(as: type) }
     mutating func decode(_ type: UInt64.Type) throws -> UInt64 { return try self.pop(as: type) }
 
+    mutating func decode(_ type: Date.Type) throws -> Date {
+        let json = self.pop()
+        guard case let .number(.double(interval)) = json  else {
+            throw DecodingError.expectedType(Double.self, at: self.codingPath, from: json)
+        }
+
+        return Date(timeIntervalSince1970: interval)
+    }
+
     // TODO: - https://github.com/apple/swift/blob/master/stdlib/public/SDK/Foundation/JSONEncoder.swift#L1852
     mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
         guard !self.isAtEnd else {

@@ -34,6 +34,11 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     func encode(_ value: UInt32) throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: UInt64) throws { self.container.assign(path: self.jsonPath, to: value.json) }
 
+    func encode(_ value: Date) throws {
+        let json = JSON.number(.double(value.timeIntervalSince1970))
+        self.container.assign(path: self.jsonPath, to: json)
+    }
+
     func encode<T : Encodable>(_ value: T) throws {
         if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
             self.container.assign(path: self.jsonPath, to: json)

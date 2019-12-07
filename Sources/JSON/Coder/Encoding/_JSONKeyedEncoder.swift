@@ -32,6 +32,11 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     func encode(_ value: UInt32, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: UInt64, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
 
+    func encode(_ value: Date, forKey key: Key) throws {
+        let json = JSON.number(.double(value.timeIntervalSince1970))
+        self.container.assign(path: self.jsonPath, key: key.stringValue, to: json)
+    }
+
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
         if let json = try? (value as? FailableJSONRepresentable)?.failableJSON() {
             self.container.assign(path: self.jsonPath, key: key.stringValue, to: json)
