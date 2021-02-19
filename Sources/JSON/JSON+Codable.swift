@@ -2,7 +2,7 @@ extension JSON: Codable {
     
     /// See `Decodable.init(from:)`.
     public init(from decoder: Decoder) throws {
-        if var container = try? decoder.container(keyedBy: JSON.CodingKeys.self) {
+        if var container = try? decoder.container(keyedBy: CodingKeys.self) {
             self = try JSON(from: &container)
         } else if var container = try? decoder.unkeyedContainer() {
             self = try JSON(from: &container)
@@ -16,7 +16,7 @@ extension JSON: Codable {
     public func encode(to encoder: Encoder) throws {
         switch self {
         case let .object(structure):
-            var container = encoder.container(keyedBy: JSON.CodingKeys.self)
+            var container = encoder.container(keyedBy: CodingKeys.self)
             try self.encode(object: structure, with: &container)
         case let .array(sequence):
             var container = encoder.unkeyedContainer()
@@ -55,7 +55,7 @@ extension JSON: Codable {
     
     // MARK: - Private Decoder Inits
     
-    private init(from container: inout KeyedDecodingContainer<JSON.CodingKeys>)throws {
+    private init(from container: inout KeyedDecodingContainer<CodingKeys>)throws {
         let object: [String: JSON] = try container.allKeys.reduce(into: [:]) { object, key in
             if let value = try? container.decodeNil(forKey: key), value {
                 object[key.stringValue] = .null
@@ -65,7 +65,7 @@ extension JSON: Codable {
                 object[key.stringValue] = .number(value)
             } else if let value = try? container.decode(Bool.self, forKey: key) {
                 object[key.stringValue] = .bool(value)
-            } else if var con = try? container.nestedContainer(keyedBy: JSON.CodingKeys.self, forKey: key) {
+            } else if var con = try? container.nestedContainer(keyedBy: CodingKeys.self, forKey: key) {
                 object[key.stringValue] = try JSON(from: &con)
             } else if var con = try? container.nestedUnkeyedContainer(forKey: key) {
                 object[key.stringValue] = try JSON(from: &con)
@@ -90,7 +90,7 @@ extension JSON: Codable {
                 array.append(.number(value))
             } else if let value = try? container.decode(Bool.self) {
                 array.append(.bool(value))
-            } else if var con = try? container.nestedContainer(keyedBy: JSON.CodingKeys.self) {
+            } else if var con = try? container.nestedContainer(keyedBy: CodingKeys.self) {
                 try array.append(JSON(from: &con))
             } else if var con = try? container.nestedUnkeyedContainer() {
                 try array.append(JSON(from: &con))
@@ -118,7 +118,7 @@ extension JSON: Codable {
     
     // MARK: - Private Encoder Methods
     
-    private func encode(object: [String: JSON], with container: inout KeyedEncodingContainer<JSON.CodingKeys>) throws {
+    private func encode(object: [String: JSON], with container: inout KeyedEncodingContainer<CodingKeys>) throws {
         try object.forEach { key, value in
             let key = CodingKeys(stringValue: key)
             
@@ -128,7 +128,7 @@ extension JSON: Codable {
             case let .number(value): try container.encode(value, forKey: key)
             case let .bool(value): try container.encode(value, forKey: key)
             case let .object(value):
-                var con = container.nestedContainer(keyedBy: JSON.CodingKeys.self, forKey: key)
+                var con = container.nestedContainer(keyedBy: CodingKeys.self, forKey: key)
                 try encode(object: value, with: &con)
             case let .array(value):
                 var con = container.nestedUnkeyedContainer(forKey: key)
@@ -145,7 +145,7 @@ extension JSON: Codable {
             case let .number(value): try container.encode(value)
             case let .bool(value): try container.encode(value)
             case let .object(value):
-                var con = container.nestedContainer(keyedBy: JSON.CodingKeys.self)
+                var con = container.nestedContainer(keyedBy: CodingKeys.self)
                 try encode(object: value, with: &con)
             case let .array(value):
                 var con = container.nestedUnkeyedContainer()
