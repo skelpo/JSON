@@ -48,6 +48,7 @@ internal struct _JSONUnkeyedDecoder: UnkeyedDecodingContainer {
     
     mutating func decode(_ type: Bool.Type)   throws -> Bool   { return try self.pop(as: type) }
     mutating func decode(_ type: Int.Type)    throws -> Int    { return try self.pop(as: type) }
+    mutating func decode(_ type: UInt.Type)   throws -> UInt   { return try self.pop(as: type) }
     mutating func decode(_ type: Float.Type)  throws -> Float  { return try self.pop(as: type) }
     mutating func decode(_ type: Double.Type) throws -> Double { return try self.pop(as: type) }
     mutating func decode(_ type: String.Type) throws -> String { return try self.pop(as: type) }

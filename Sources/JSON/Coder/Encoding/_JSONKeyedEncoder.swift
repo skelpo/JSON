@@ -19,6 +19,7 @@ internal final class _JSONKeyedEncoder<K: CodingKey>: KeyedEncodingContainerProt
     func encodeNil(forKey key: Key)               throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: .null) }
     func encode(_ value: Bool, forKey key: Key)   throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: Int, forKey key: Key)    throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
+    func encode(_ value: UInt, forKey key: Key)   throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: String, forKey key: Key) throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: Float, forKey key: Key)  throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
     func encode(_ value: Double, forKey key: Key) throws { self.container.assign(path: self.jsonPath, key: key.stringValue, to: value.json) }
