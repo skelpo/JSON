@@ -1,5 +1,6 @@
 import XCTest
 import JSON
+import Foundation
 
 final class JSONCodingTests: XCTestCase {
     private var userJSON: JSON = [
@@ -265,6 +266,33 @@ final class JSONCodingTests: XCTestCase {
         XCTAssertEqual(decoded.name, "same ol'")
     }
     
+    func testCodingUIntAsSingleValue() throws {
+        struct Test: Codable {
+            let value: UInt
+            init(value: UInt) {
+                self.value = value
+            }
+            init(from decoder: Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                self.value = try container.decode(UInt.self)
+            }
+            func encode(to encoder: Encoder) throws {
+                var container = encoder.singleValueContainer()
+                try container.encode(self.value)
+            }
+        }
+        
+        let signed = Int.random(in: (Int.min ... Int.max))
+        let unsigned: UInt = .init(bitPattern: signed)
+        let subject = Test(value: unsigned)
+        let json = try JSONCoder.encode(subject)
+        
+        XCTAssertEqual(json.int, Int(bitPattern: subject.value))
+        
+        let decoded = try JSONCoder.decode(Test.self, from: json)
+        
+        XCTAssertEqual(decoded.value, subject.value)
+    }
     
     // MARK: - Helpers
     
