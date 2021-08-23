@@ -160,6 +160,18 @@ extension FixedWidthInteger {
     }
 }
 
+/// Handle `UInt` as a special-case: round-trip it through `Int` by bit pattern.
+extension UInt: JSONRepresentable {
+    public var json: JSON {
+        return .number(.int(Int(bitPattern: self)))
+    }
+    
+    public init?(json: JSON) {
+        guard let int = json.int else { return nil }
+        self.init(bitPattern: int)
+    }
+}
+
 extension Int8: JSONRepresentable { }
 extension Int16: JSONRepresentable { }
 extension Int32: JSONRepresentable { }

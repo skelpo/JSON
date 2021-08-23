@@ -21,6 +21,7 @@ internal final class _JSONUnkeyedEncoder: UnkeyedEncodingContainer {
     func encodeNil()             throws { self.container.assign(path: self.jsonPath, to: .null) }
     func encode(_ value: Bool)   throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: Int)    throws { self.container.assign(path: self.jsonPath, to: value.json) }
+    func encode(_ value: UInt)   throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: String) throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: Float)  throws { self.container.assign(path: self.jsonPath, to: value.json) }
     func encode(_ value: Double) throws { self.container.assign(path: self.jsonPath, to: value.json) }

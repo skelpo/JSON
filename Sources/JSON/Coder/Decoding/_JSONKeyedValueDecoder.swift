@@ -53,6 +53,7 @@ internal struct _JSONKeyedValueDecoder<K: CodingKey>: KeyedDecodingContainerProt
 
     func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool   { return try _decode(type, forKey: key) }
     func decode(_ type: Int.Type, forKey key: K)    throws -> Int    { return try _decode(type, forKey: key) }
+    func decode(_ type: UInt.Type, forKey key: K)   throws -> UInt   { return try _decode(type, forKey: key) }
     func decode(_ type: Float.Type, forKey key: K)  throws -> Float  { return try _decode(type, forKey: key) }
     func decode(_ type: Double.Type, forKey key: K) throws -> Double { return try _decode(type, forKey: key) }
     func decode(_ type: String.Type, forKey key: K) throws -> String { return try _decode(type, forKey: key) }
